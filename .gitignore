@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Frontend dependencies and generated output
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+
+# Java build output
+target/
+*.class
+
+# Logs and local IDE settings
+*.log
+.idea/
