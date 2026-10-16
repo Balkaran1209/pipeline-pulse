@@ -19,11 +19,11 @@ A dashboard for viewing and managing CI pipelines, runs, and triage notes.
 
 ## Development status
 
-React/TypeScript and Spring Boot scaffolds are available.
-Database integration and application endpoints are pending.
+The frontend and backend scaffolds are available.
+PostgreSQL integration, the initial schema migration, and the database-aware
+health endpoint are implemented.
 
-Run instructions, verification commands, design decisions, and trade-offs
-will be added as the application is implemented.
+Pipeline, run, and note APIs and their frontend views are pending.
 
 
 ## Frontend development
@@ -44,19 +44,50 @@ To verify the frontend:
 
 ## Backend development
 
+Keep Docker Desktop running.
+
 From the repository root:
 
+    docker compose up -d --wait db
     export JAVA_HOME=$(/usr/libexec/java_home -v 21)
     export PATH="$JAVA_HOME/bin:$PATH"
     cd backend
     ./mvnw spring-boot:run
 
-The server listens on port 8080 with context path /api/v1.
-No application endpoints have been implemented yet.
+The backend listens on port 8080 with context path /api/v1.
 
-To build and run the current tests:
+In another terminal, check its database connection:
 
+    curl -i http://localhost:8080/api/v1/health
+
+A successful check returns HTTP 200:
+
+    {"status":"ok","db":"ok"}
+
+A database connection failure returns HTTP 503:
+
+    {"status":"error","db":"unavailable"}
+
+To build and run the current tests, with PostgreSQL running:
+
+    cd backend
     ./mvnw clean verify
+
+Run the commands above from the repository root unless already inside backend.
+
+## Database and migrations
+
+PostgreSQL runs through Docker Compose and stores data in the postgres_data
+named volume.
+
+Flyway applies versioned SQL migrations from backend/migrations.
+Maven packages these scripts into the application under db/migration.
+
+The initial migration creates pipelines, runs, and notes, with foreign keys,
+cascading deletes, validation constraints, and indexes.
+
+Future schema changes will use new migrations rather than editing an
+already-applied migration.
 
 ## Delivery requirements
 

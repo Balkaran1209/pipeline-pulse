@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: pipeline_pulse
+      POSTGRES_USER: pipeline_pulse
+      POSTGRES_PASSWORD: pipeline_pulse
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - -h
+        - 127.0.0.1
+        - -U
+        - pipeline_pulse
+        - -d
+        - pipeline_pulse
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  postgres_data:
