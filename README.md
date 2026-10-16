@@ -19,8 +19,8 @@ A dashboard for viewing and managing CI pipelines, runs, and triage notes.
 
 ## Development status
 
-The React and TypeScript frontend scaffold is available.
-Backend and database implementation are pending.
+React/TypeScript and Spring Boot scaffolds are available.
+Database integration and application endpoints are pending.
 
 Run instructions, verification commands, design decisions, and trade-offs
 will be added as the application is implemented.
@@ -41,6 +41,22 @@ To verify the frontend:
 
     npm run build
     npm run lint
+
+## Backend development
+
+From the repository root:
+
+    export JAVA_HOME=$(/usr/libexec/java_home -v 21)
+    export PATH="$JAVA_HOME/bin:$PATH"
+    cd backend
+    ./mvnw spring-boot:run
+
+The server listens on port 8080 with context path /api/v1.
+No application endpoints have been implemented yet.
+
+To build and run the current tests:
+
+    ./mvnw clean verify
 
 ## Delivery requirements
 
