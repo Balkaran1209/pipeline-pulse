@@ -19,10 +19,28 @@ A dashboard for viewing and managing CI pipelines, runs, and triage notes.
 
 ## Development status
 
-Repository initialized. Application implementation is in progress.
+The React and TypeScript frontend scaffold is available.
+Backend and database implementation are pending.
 
 Run instructions, verification commands, design decisions, and trade-offs
 will be added as the application is implemented.
+
+
+## Frontend development
+
+From the repository root:
+
+    nvm use
+    cd frontend
+    npm ci
+    npm run dev
+
+Open http://localhost:3000.
+
+To verify the frontend:
+
+    npm run build
+    npm run lint
 
 ## Delivery requirements
 
