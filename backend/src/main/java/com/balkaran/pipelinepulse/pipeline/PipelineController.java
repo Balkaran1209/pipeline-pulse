@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Map;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @RestController
 @RequestMapping("/pipelines")
@@ -33,12 +34,15 @@ public class PipelineController {
 
     @PostMapping
     public ResponseEntity<Pipeline> create(
-            @Valid @RequestBody CreatePipelineRequest request
+            @Valid @RequestBody CreatePipelineRequest request,
+            @RequestHeader(
+                    name = "Idempotency-Key",
+                    required = false
+            ) String idempotencyKey
     ) {
-        Pipeline pipeline = service.create(request);
+        Pipeline pipeline = service.create(request, idempotencyKey);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(pipeline);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pipeline);
     }
 
     @GetMapping("/{id}")

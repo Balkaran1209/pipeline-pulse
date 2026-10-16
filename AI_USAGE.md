@@ -23,6 +23,9 @@ ChatGPT / Codex for development guidance, explanations, and debugging.
 - Guided implementation of pipeline retrieval and deletion, including
   shared handling for missing resources.
 - Guided implementation of partial pipeline updates and their validation.
+- Guided implementation of persistent pipeline creation idempotency,
+  transaction handling, database locking, conflict responses, and an
+  automated API verification script.
 
 
 
@@ -48,6 +51,7 @@ This record will be updated during implementation.
     4. PipelineService.java, this generates IDs and coordinates pipeline operations
     5. PipelineController.java, this should expose the HTTP endpoints
     Then generate one in common folder, ApiExceptionHandler.java which should turn errors from our API into consistent JSON responses i.e., Validation failure and JSON cannot be read. Help me generate these 6 files."
+- "We need to implemetn idempotency in creation. Our frontend will generate an Idempotency-Key for each pipeline creation attempt and reuse it for retries. Controller should pass the key and request body to Service. Without a key, creation should work normally a blank key returns error. With a key, the service should acquire a database lock and then check pipeline_creation_requests: matching the name and the product return the saved original response; different input should throw an conflict. For a new key, it should create the pipeline and save the original input and response—including ID, name, product, and timestamp—in one transaction, so both inserts succeed or both roll back."
 
 Implementation prompts will be recorded as development proceeds.
 
@@ -95,6 +99,13 @@ This is running change, might add more occurances.
 - Verified omitted fields, IDs, and creation timestamps remain unchanged.
 - Verified invalid updates return HTTP 400 without changing stored data.
 - Verified updating a missing pipeline returns HTTP 404.
+- Passed all six checks in backend/scripts/check-idempotency.mjs.
+- Verified eight simultaneous requests using one key create one pipeline.
+- Verified original responses replay after pipeline updates and deletion.
+- Verified conflicting input returns HTTP 409 and blank keys return HTTP 400.
+- Verified requests without keys create separate pipelines.
+- Manually verified replay after an API restart preserves the original
+  pipeline ID and creation timestamp.
 
 Application verification will be recorded as features are implemented.
 
@@ -104,4 +115,4 @@ Application verification will be recorded as features are implemented.
 - Date: 2026-10-16.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
-  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java.
+  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql.

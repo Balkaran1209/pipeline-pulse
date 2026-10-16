@@ -63,12 +63,23 @@ The initial schema migration and database-aware health endpoint are implemented.
 Pipeline creation, listing, individual retrieval, partial updates, and
 deletion are implemented, with validation and structured JSON errors.
 
-Pipeline creation idempotency is pending.
+Pipeline creation supports an optional Idempotency-Key header.
 Run and note APIs and frontend views are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string
 values, empty objects, and unknown fields are rejected with HTTP 400.
+For pipeline creation, the same Idempotency-Key and submitted name/product
+return HTTP 201 with the original response. Reusing the key with different
+input returns HTTP 409. A blank key returns HTTP 400. Requests without a key
+create separate pipelines.
+
+The pipeline and saved response are written in one transaction. Database
+locking coordinates concurrent requests using the same key. Saved responses
+survive pipeline updates, deletion, and API restarts.
+
+Idempotency records currently have no expiry. A production deployment
+would need a documented retention policy and cleanup process.
 
 
 ## Frontend development
@@ -119,6 +130,19 @@ To build and run the current tests, with PostgreSQL running:
     ./mvnw clean verify
 
 Run the commands above from the repository root unless already inside backend.
+
+### Idempotency verification
+
+With the API and PostgreSQL running, execute from the repository root:
+
+```bash
+nvm use
+node backend/scripts/check-idempotency.mjs
+```
+
+This checks concurrent creation, conflicting input, original-response replay
+after updates and deletion, requests without keys, and blank-key validation.
+It creates and deletes test pipelines; their idempotency records remain.
 
 ## Database and migrations
 

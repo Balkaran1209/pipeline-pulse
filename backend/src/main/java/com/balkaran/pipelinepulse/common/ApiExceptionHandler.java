@@ -55,6 +55,19 @@ public class ApiExceptionHandler {
         return badRequest("VALIDATION_ERROR", exception.getMessage());
     }
 
+    @ExceptionHandler(IdempotencyConflictException.class)
+    public ResponseEntity<ApiError> handleIdempotencyConflict(
+            IdempotencyConflictException exception
+    ) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ApiError(
+                        new ErrorDetails(
+                                "IDEMPOTENCY_CONFLICT",
+                                exception.getMessage()
+                        )
+                ));
+    }
+
     private static ResponseEntity<ApiError> badRequest(
             String code, String message
     ) {
