@@ -7,6 +7,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.http.HttpStatus;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -35,6 +36,16 @@ public class ApiExceptionHandler {
                 "INVALID_JSON",
                 "Request body must contain valid JSON with the expected fields"
         );
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiError> handleNotFound(
+            ResourceNotFoundException exception
+    ) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiError(
+                        new ErrorDetails("NOT_FOUND", exception.getMessage())
+                ));
     }
 
     private static ResponseEntity<ApiError> badRequest(

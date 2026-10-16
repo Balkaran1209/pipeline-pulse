@@ -20,6 +20,9 @@ ChatGPT / Codex for development guidance, explanations, and debugging.
 - Nginx configuration(nginx.conf) for static assets, frontend route fallback, and API proxying was written using AI.
 - Guided implementation of pipeline creation and listing, request
   validation, database access, and shared API error handling.
+- Guided implementation of pipeline retrieval and deletion, including
+  shared handling for missing resources.
+
 
 
 
@@ -83,6 +86,10 @@ This is running change, might add more occurances.
   created pipeline.
 - Verified blank pipeline names return HTTP 400 with VALIDATION_ERROR.
 - Verified malformed JSON returns HTTP 400 with INVALID_JSON.
+- Verified retrieving an existing pipeline returns HTTP 200.
+- Verified retrieving an unknown pipeline returns HTTP 404 with NOT_FOUND.
+- Verified deleting an existing pipeline returns HTTP 204 with no body.
+- Verified retrieving that pipeline after deletion returns HTTP 404.
 
 Application verification will be recorded as features are implemented.
 

@@ -2,6 +2,7 @@ package com.balkaran.pipelinepulse.pipeline;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -47,5 +48,25 @@ public class PipelineRepository {
                 .param("product", product)
                 .query(ROW_MAPPER)
                 .single();
+    }
+
+    public Optional<Pipeline> findById(String id) {
+    return jdbcClient.sql("""
+            SELECT id, name, product, created_at
+            FROM pipelines
+            WHERE id = :id
+            """)
+            .param("id", id)
+            .query(ROW_MAPPER)
+            .optional();
+    }
+
+    public int deleteById(String id) {
+        return jdbcClient.sql("""
+                DELETE FROM pipelines
+                WHERE id = :id
+                """)
+                .param("id", id)
+                .update();
     }
 }
