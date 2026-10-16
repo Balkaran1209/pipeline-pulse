@@ -18,6 +18,8 @@ ChatGPT / Codex for development guidance, explanations, and debugging.
 - Frontend and backend Dockerfiles and Docker ignore files.
 - docker-compose.yml for all Frotnend, Backend and DB was written using AI
 - Nginx configuration(nginx.conf) for static assets, frontend route fallback, and API proxying was written using AI.
+- Guided implementation of pipeline creation and listing, request
+  validation, database access, and shared API error handling.
 
 
 
@@ -34,6 +36,14 @@ This record will be updated during implementation.
 - "Help me containerize my Pipeline Pulse application. 
     Required behavior is that one command, docker compose up --build, starts the frontend, API, and database. Serve the compiled frontend through Nginx. Handle API container address changes. 
     Generate: backend/Dockerfile backend/.dockerignore frontend/Dockerfile frontend/.dockerignore frontend/nginx.conf and Updated root docker-compose.yml"
+- "Help me implement GET POST and validation errors in the assignment’s required JSON format. We will have 6 files, 5 in backend/src/main/java/com/balkaran/pipelinepulse/pipeline 
+    and one in backend/src/main/java/com/balkaran/pipelinepulse/common. The 5 files are:
+    1. Pipeline.java, this represents a pipeline returned by the API
+    2. CreatePipelineRequest.java, this should define and validate the incoming JSON
+    3. PipelineRepository.java, this executes SQL and converts database rows into Java records
+    4. PipelineService.java, this generates IDs and coordinates pipeline operations
+    5. PipelineController.java, this should expose the HTTP endpoints
+    Then generate one in common folder, ApiExceptionHandler.java which should turn errors from our API into consistent JSON responses i.e., Validation failure and JSON cannot be read. Help me generate these 6 files."
 
 Implementation prompts will be recorded as development proceeds.
 
@@ -69,6 +79,10 @@ This is running change, might add more occurances.
 - Docker images built successfully.
 - All three Compose services reported healthy.
 - Health requests through the frontend proxy returned HTTP 200.
+- Verified pipeline creation returns HTTP 201 and listing returns the
+  created pipeline.
+- Verified blank pipeline names return HTTP 400 with VALIDATION_ERROR.
+- Verified malformed JSON returns HTTP 400 with INVALID_JSON.
 
 Application verification will be recorded as features are implemented.
 
