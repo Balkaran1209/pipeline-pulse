@@ -41,4 +41,15 @@ public class PipelineService {
             throw new ResourceNotFoundException("Pipeline not found: " + id);
         }
     }
+
+    public Pipeline update(String id, UpdatePipelineRequest request) {
+    String name = request.name() == null
+            ? null
+            : request.name().strip();
+
+    return repository.update(id, name, request.product())
+            .orElseThrow(() ->
+                    new ResourceNotFoundException("Pipeline not found: " + id)
+            );
+    }
 }

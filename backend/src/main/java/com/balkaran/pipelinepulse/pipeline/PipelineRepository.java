@@ -69,4 +69,21 @@ public class PipelineRepository {
                 .param("id", id)
                 .update();
     }
+
+    public Optional<Pipeline> update(
+        String id, String name, String product
+    ) {
+        return jdbcClient.sql("""
+                UPDATE pipelines
+                SET name = COALESCE(CAST(:name AS TEXT), name),
+                    product = COALESCE(CAST(:product AS TEXT), product)
+                WHERE id = :id
+                RETURNING id, name, product, created_at
+                """)
+                .param("id", id)
+                .param("name", name)
+                .param("product", product)
+                .query(ROW_MAPPER)
+                .optional();
+    }
 }

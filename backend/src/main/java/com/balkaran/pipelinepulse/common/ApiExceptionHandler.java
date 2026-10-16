@@ -48,6 +48,13 @@ public class ApiExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ApiError> handleInvalidRequest(
+            InvalidRequestException exception
+    ) {
+        return badRequest("VALIDATION_ERROR", exception.getMessage());
+    }
+
     private static ResponseEntity<ApiError> badRequest(
             String code, String message
     ) {

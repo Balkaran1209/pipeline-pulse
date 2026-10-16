@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.util.Map;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 @RestController
 @RequestMapping("/pipelines")
@@ -48,5 +50,14 @@ public class PipelineController {
     public ResponseEntity<Void> deleteById(@PathVariable("id") String id) {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public Pipeline update(
+            @PathVariable("id") String id,
+            @RequestBody Map<String, Object> body
+    ) {
+        UpdatePipelineRequest request = UpdatePipelineRequest.from(body);
+        return service.update(id, request);
     }
 }

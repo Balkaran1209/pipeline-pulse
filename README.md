@@ -60,11 +60,15 @@ Keep the database running for backend development and the current backend tests.
 
 The frontend scaffold, API, and PostgreSQL run through Docker Compose.
 The initial schema migration and database-aware health endpoint are implemented.
-Pipeline creation, listing, individual retrieval, and deletion are implemented,
-with request validation and structured JSON errors.
+Pipeline creation, listing, individual retrieval, partial updates, and
+deletion are implemented, with validation and structured JSON errors.
 
-Pipeline updates and creation idempotency are pending.
+Pipeline creation idempotency is pending.
 Run and note APIs and frontend views are pending.
+
+Pipeline updates accept name, product, or both. Omitted fields remain
+unchanged. Blank names, unsupported products, explicit nulls, non-string
+values, empty objects, and unknown fields are rejected with HTTP 400.
 
 
 ## Frontend development

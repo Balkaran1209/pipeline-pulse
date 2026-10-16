@@ -22,6 +22,7 @@ ChatGPT / Codex for development guidance, explanations, and debugging.
   validation, database access, and shared API error handling.
 - Guided implementation of pipeline retrieval and deletion, including
   shared handling for missing resources.
+- Guided implementation of partial pipeline updates and their validation.
 
 
 
@@ -90,6 +91,10 @@ This is running change, might add more occurances.
 - Verified retrieving an unknown pipeline returns HTTP 404 with NOT_FOUND.
 - Verified deleting an existing pipeline returns HTTP 204 with no body.
 - Verified retrieving that pipeline after deletion returns HTTP 404.
+- Verified name-only, product-only, and combined pipeline updates.
+- Verified omitted fields, IDs, and creation timestamps remain unchanged.
+- Verified invalid updates return HTTP 400 without changing stored data.
+- Verified updating a missing pipeline returns HTTP 404.
 
 Application verification will be recorded as features are implemented.
 
@@ -99,4 +104,4 @@ Application verification will be recorded as features are implemented.
 - Date: 2026-10-16.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
-  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf
+  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java.
