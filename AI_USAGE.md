@@ -15,6 +15,9 @@ ChatGPT / Codex for development guidance, explanations, and debugging.
 - JDBC/Flyway dependencies and migration resource configuration in pom.xml.
 - Database connection properties and the initial SQL migration.
 - Schema design was manually done which was used to AI generate backend/migrations/V1__create_core_tables.sql
+- Frontend and backend Dockerfiles and Docker ignore files.
+- docker-compose.yml for all Frotnend, Backend and DB was written using AI
+- Nginx configuration(nginx.conf) for static assets, frontend route fallback, and API proxying was written using AI.
 
 
 
@@ -28,16 +31,24 @@ This record will be updated during implementation.
     Pipelines: id is the primary key since it uniquely identifies each pipeline.
     Runs: id is the PK. pipeline_id is a foreign key (FK) referencing pipelines.id.
     Notes: id is the PK. run_id is an FK referencing runs.id"
-    
-
-
+- "Help me containerize my Pipeline Pulse application. 
+    Required behavior is that one command, docker compose up --build, starts the frontend, API, and database. Serve the compiled frontend through Nginx. Handle API container address changes. 
+    Generate: backend/Dockerfile backend/.dockerignore frontend/Dockerfile frontend/.dockerignore frontend/nginx.conf and Updated root docker-compose.yml"
 
 Implementation prompts will be recorded as development proceeds.
 
 ## Output rejected or rewritten
+- In docker-compose.yml 
+    depends_on: [db] 
+    without a readiness check was implemented by Codex, which was changed to,
+    depends_on:
+      db:
+        condition: service_healthy
+    because a started database container may not yet accept connections.
+    
 
-Pending implementation. Before submission, record at least two concrete
-examples of AI output rejected or rewritten, including the reasons.
+
+This is running change, might add more occurances.
 
 ## Verification
 
@@ -55,6 +66,9 @@ examples of AI output rejected or rewritten, including the reasons.
 - Flyway applied V1 and created pipelines, runs, and notes.
 - Verified health responses through a database outage: 200, then 503,
   then 200 after database recovery without restarting the backend.
+- Docker images built successfully.
+- All three Compose services reported healthy.
+- Health requests through the frontend proxy returned HTTP 200.
 
 Application verification will be recorded as features are implemented.
 
@@ -64,3 +78,4 @@ Application verification will be recorded as features are implemented.
 - Date: 2026-10-16.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
+  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf

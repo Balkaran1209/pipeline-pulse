@@ -12,6 +12,45 @@ A dashboard for viewing and managing CI pipelines, runs, and triage notes.
 - Flyway SQL migrations
 - Docker Compose
 
+## Run the complete stack
+
+Prerequisite: Docker Desktop or Docker Engine with Docker Compose.
+
+From the repository root:
+
+    docker compose up --build
+
+No .env file is required.
+
+- Frontend: http://localhost:3000
+- API health: http://localhost:8080/api/v1/health
+
+To run in the background and wait for readiness:
+
+    docker compose up --build -d --wait
+
+To inspect services:
+
+    docker compose ps
+
+To stop and remove containers while keeping the database volume:
+
+    docker compose down
+
+The frontend serves compiled React assets through Nginx.
+Requests to /api/ are forwarded to the API container.
+Flyway applies database migrations when the API starts.
+
+## Local development alongside Docker
+
+Before starting a frontend or backend development server locally, stop its
+corresponding container to free port 3000 or 8080:
+
+    docker compose stop frontend
+    docker compose stop api
+
+Keep the database running for backend development and the current backend tests.
+
 ## Application ports
 
 - Frontend: http://localhost:3000
@@ -19,9 +58,8 @@ A dashboard for viewing and managing CI pipelines, runs, and triage notes.
 
 ## Development status
 
-The frontend and backend scaffolds are available.
-PostgreSQL integration, the initial schema migration, and the database-aware
-health endpoint are implemented.
+The frontend scaffold, API, and PostgreSQL run through Docker Compose.
+The initial schema migration and database-aware health endpoint are implemented.
 
 Pipeline, run, and note APIs and their frontend views are pending.
 
@@ -89,10 +127,7 @@ cascading deletes, validation constraints, and indexes.
 Future schema changes will use new migrations rather than editing an
 already-applied migration.
 
-## Delivery requirements
+## Seeding
 
-The completed stack will start with:
-
-    docker compose up --build
-
-The seed command will load the supplied seed/seed.json without modifying it.
+The seed import command is not implemented yet.
+It will load the supplied seed/seed.json without modifying it.
