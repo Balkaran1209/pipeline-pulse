@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
 @Repository
 public class NoteRepository {
@@ -38,5 +39,36 @@ public class NoteRepository {
                 .param("runId", runId)
                 .query(ROW_MAPPER)
                 .list();
+    }
+
+    public Optional<Note> create(
+            String id,
+            String runId,
+            String author,
+            String body
+    ) {
+        return jdbcClient.sql("""
+                INSERT INTO notes (id, run_id, author, body)
+                SELECT :id, r.id, :author, :body
+                FROM runs r
+                WHERE r.id = :runId
+                FOR KEY SHARE OF r
+                RETURNING id, run_id, author, body, created_at
+                """)
+                .param("id", id)
+                .param("runId", runId)
+                .param("author", author)
+                .param("body", body)
+                .query(ROW_MAPPER)
+                .optional();
+    }
+
+    public int deleteById(String id) {
+        return jdbcClient.sql("""
+                DELETE FROM notes
+                WHERE id = :id
+                """)
+                .param("id", id)
+                .update();
     }
 }

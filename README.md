@@ -72,7 +72,8 @@ Run creation, listing, status filtering, and cursor pagination are implemented.
 Run details are implemented and include associated notes.
 Run status updates and completion timing are implemented.
 Live run events are pending.
-Note APIs and frontend views are pending.
+Note creation and deletion are implemented.
+Frontend views are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string
@@ -179,7 +180,6 @@ GET /api/v1/runs/{id} returns the run's fields and a notes array.
 Notes are ordered by creation time ascending, then ID ascending.
 Runs without notes return an empty array. Missing runs return HTTP 404.
 
-Note creation and deletion endpoints are not implemented yet.
 
 ## Run status updates
 
@@ -200,6 +200,21 @@ HTTP 400; a missing run returns HTTP 404.
 
 RunStatusTests verifies completion timing, repeated updates, corrections
 between completed statuses, reopening, and nonnegative duration.
+
+## Notes
+
+POST /api/v1/runs/{runId}/notes accepts author and body and returns
+HTTP 201 with the created note. Both fields must be nonblank. Surrounding
+author whitespace is trimmed; body formatting is preserved.
+
+DELETE /api/v1/notes/{id} returns HTTP 204 with no body.
+
+Invalid input returns HTTP 400. Missing runs or notes return HTTP 404.
+Created notes appear in run details. Deleting a pipeline also deletes
+its runs and their notes.
+
+NoteWorkflowTests verifies note creation and retrieval, separation
+between runs, deletion, missing resources, and cascading deletion.
 
 ## Database and migrations
 

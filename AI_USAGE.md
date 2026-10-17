@@ -34,6 +34,8 @@ ChatGPT / Codex for development guidance, explanations, and debugging.
   and combining run data with its associated notes.
 - Guided implementation of run status validation, transactional updates,
 row locking, completion timing, and automated database tests.
+- Guided implementation of note creation and deletion, validation,
+  missing-resource handling, and database workflow tests.
 
 
 
@@ -135,6 +137,11 @@ This is running change, might add more occurances.
 - Passed all 12 Maven tests, including four run-status integration tests.
 - Verified all completed statuses, preserved completion timing, reopening
   behavior, persisted values, and protection against negative duration.
+- Manually verified note creation, inclusion in run details, deletion,
+  repeated deletion, blank-field validation, and missing-run handling.
+- Passed all 16 Maven tests, including four note workflow tests.
+- Verified author trimming, body formatting, separation between runs,
+  and pipeline-to-run-to-note cascading deletion.
 
 Application verification will be recorded as features are implemented.
 
@@ -144,4 +151,4 @@ Application verification will be recorded as features are implemented.
 - Date: 2026-10-16.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
-  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java.
+  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java.
