@@ -67,8 +67,10 @@ Pipeline creation supports an optional Idempotency-Key header.
 Run creation is implemented. New runs start as queued, with a generated
 ID and start timestamp.
 
-Run listing, filtering, pagination, details, status updates, and live
-events are pending. Note APIs and frontend views are pending.
+Run creation, listing, status filtering, and cursor pagination are implemented.
+
+Run details, status updates, and live events are pending.
+Note APIs and frontend views are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string
@@ -147,6 +149,27 @@ node backend/scripts/check-idempotency.mjs
 This checks concurrent creation, conflicting input, original-response replay
 after updates and deletion, requests without keys, and blank-key validation.
 It creates and deletes test pipelines; their idempotency records remain.
+
+## Run listing
+
+GET /api/v1/pipelines/{pipelineId}/runs supports optional status, limit,
+and cursor parameters.
+
+Results are ordered by startedAt descending, then ID descending.
+The response contains items and nextCursor. A null nextCursor means
+there are no more results.
+
+The default limit is 20; accepted values are 1–100.
+Allowed statuses are queued, running, passed, failed, and flaky.
+When following a cursor, keep the same pipeline and status filter.
+
+Invalid parameters return HTTP 400. A missing pipeline returns HTTP 404.
+An existing pipeline without matching runs returns an empty items array.
+
+RunListingTests covers timestamp ties, pipeline separation, filtered
+pagination, inserts and deletions between pages, cursor scope, and empty
+or missing pipelines. These database tests run through ./mvnw clean verify
+with PostgreSQL running and roll back their test data afterward.
 
 ## Database and migrations
 

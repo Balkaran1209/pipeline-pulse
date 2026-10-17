@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -66,6 +67,15 @@ public class ApiExceptionHandler {
                                 exception.getMessage()
                         )
                 ));
+    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiError> handleTypeMismatch(
+            MethodArgumentTypeMismatchException exception
+    ) {
+        return badRequest(
+                "VALIDATION_ERROR",
+                exception.getName() + " has an invalid value"
+        );
     }
 
     private static ResponseEntity<ApiError> badRequest(

@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class RunController {
@@ -16,6 +19,15 @@ public class RunController {
 
     public RunController(RunService service) {
         this.service = service;
+    }
+    @GetMapping("/pipelines/{pipelineId}/runs")
+    public RunPage findByPipeline(
+            @PathVariable("pipelineId") String pipelineId,
+            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(name = "limit", defaultValue = "20") int limit,
+            @RequestParam(name = "cursor", required = false) String cursor
+    ) {
+        return service.findByPipeline(pipelineId, status, limit, cursor);
     }
 
     @PostMapping("/pipelines/{pipelineId}/runs")

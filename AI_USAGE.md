@@ -28,6 +28,8 @@ ChatGPT / Codex for development guidance, explanations, and debugging.
   automated API verification script.
 - Guided implementation of run creation, request validation, database
   mapping, and missing-pipeline handling.
+- Guided implementation of run listing, status filtering, scoped cursors,
+  pagination validation, and database integration tests.
 
 
 
@@ -54,6 +56,7 @@ This record will be updated during implementation.
     5. PipelineController.java, this should expose the HTTP endpoints
     Then generate one in common folder, ApiExceptionHandler.java which should turn errors from our API into consistent JSON responses i.e., Validation failure and JSON cannot be read. Help me generate these 6 files."
 - "We need to implemetn idempotency in creation. Our frontend will generate an Idempotency-Key for each pipeline creation attempt and reuse it for retries. Controller should pass the key and request body to Service. Without a key, creation should work normally a blank key returns error. With a key, the service should acquire a database lock and then check pipeline_creation_requests: matching the name and the product return the saved original response; different input should throw an conflict. For a new key, it should create the pipeline and save the original input and response—including ID, name, product, and timestamp—in one transaction, so both inserts succeed or both roll back."
+- "We need to implement GET runs to list a pipeline’s runs (newest first), using ID to break timestamp ties. It should support optional status filtering, a page limit of 1–100 (we can default maybe 20), and cursor pagination. Response shall contain items and nextCursor; a null cursor if no more results. Cursor should remember the last run’s timestamp and ID and sdhould be tied to the pipeline and filter. Error raising should be there as we have done so far. Also create in test file to test everything."
 
 Implementation prompts will be recorded as development proceeds.
 
@@ -65,6 +68,8 @@ Implementation prompts will be recorded as development proceeds.
       db:
         condition: service_healthy
     because a started database container may not yet accept connections.
+
+- In backend/src/main/java/com/balkaran/pipelinepulse/pipeline/PipelineController.java, required = false was made instead of true for idempotency key. Since true adds a stricter rule than the assignment asks for. The document says: “POST /pipelines must be idempotent when the client sends an Idempotency-Key header.” So the header is optional in the assignment. The backend must prevent duplicates when a client sends a key; the document does not require every request to include one.
     
 
 
@@ -112,6 +117,10 @@ This is running change, might add more occurances.
   timestamp, and null completion time and duration.
 - Verified blank triggeredBy and missing commitSha return HTTP 400.
 - Verified creating a run for a missing pipeline returns HTTP 404.
+- Manually verified newest-first pagination without duplicate results,
+  status filtering, empty results, invalid parameters, and missing pipelines.
+- Passed all eight Maven tests: seven run-listing integration tests and
+  the application startup test.
 
 Application verification will be recorded as features are implemented.
 
@@ -121,4 +130,4 @@ Application verification will be recorded as features are implemented.
 - Date: 2026-10-16.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
-  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql.
+  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java.
