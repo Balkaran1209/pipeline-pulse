@@ -30,6 +30,8 @@ ChatGPT / Codex for development guidance, explanations, and debugging.
   mapping, and missing-pipeline handling.
 - Guided implementation of run listing, status filtering, scoped cursors,
   pagination validation, and database integration tests.
+- Guided implementation of run details, the note model and repository,
+  and combining run data with its associated notes.
 
 
 
@@ -121,6 +123,11 @@ This is running change, might add more occurances.
   status filtering, empty results, invalid parameters, and missing pipelines.
 - Passed all eight Maven tests: seven run-listing integration tests and
   the application startup test.
+- Verified retrieving an existing run returns HTTP 200 with an empty
+  notes array when no notes exist.
+- Verified retrieving a missing run returns HTTP 404.
+- Inserted a temporary database note and verified it appeared in run
+  details, then deleted the temporary note.
 
 Application verification will be recorded as features are implemented.
 

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.balkaran.pipelinepulse.common.InvalidRequestException;
+import com.balkaran.pipelinepulse.note.NoteRepository;
 
 @Service
 public class RunService {
@@ -17,8 +18,13 @@ public class RunService {
         Set.of("queued", "running", "passed", "failed", "flaky");
     private final RunRepository repository;
 
-    public RunService(RunRepository repository) {
+    private final NoteRepository noteRepository;
+    public RunService(
+        RunRepository repository,
+        NoteRepository noteRepository
+    ) {
         this.repository = repository;
+        this.noteRepository = noteRepository;
     }
 
     public Run create(String pipelineId, CreateRunRequest request) {
@@ -89,5 +95,16 @@ public class RunService {
         }
 
         return new RunPage(items, nextCursor);
+    }
+    public RunDetails findById(String id) {
+        Run run = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Run not found: " + id)
+                );
+
+        return RunDetails.from(
+                run,
+                noteRepository.findByRunId(id)
+        );
     }
 }

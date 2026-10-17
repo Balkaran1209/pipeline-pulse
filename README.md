@@ -69,7 +69,8 @@ ID and start timestamp.
 
 Run creation, listing, status filtering, and cursor pagination are implemented.
 
-Run details, status updates, and live events are pending.
+Run details are implemented and include associated notes.
+Run status updates and live events are pending.
 Note APIs and frontend views are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
@@ -170,6 +171,14 @@ RunListingTests covers timestamp ties, pipeline separation, filtered
 pagination, inserts and deletions between pages, cursor scope, and empty
 or missing pipelines. These database tests run through ./mvnw clean verify
 with PostgreSQL running and roll back their test data afterward.
+
+## Run details
+
+GET /api/v1/runs/{id} returns the run's fields and a notes array.
+Notes are ordered by creation time ascending, then ID ascending.
+Runs without notes return an empty array. Missing runs return HTTP 404.
+
+Note creation and deletion endpoints are not implemented yet.
 
 ## Database and migrations
 

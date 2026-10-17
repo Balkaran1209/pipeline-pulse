@@ -120,4 +120,16 @@ public class RunRepository {
 
         return query.query(ROW_MAPPER).list();
     }
+
+    public Optional<Run> findById(String id) {
+    return jdbcClient.sql("""
+            SELECT id, pipeline_id, status, started_at,
+                   finished_at, duration_ms, triggered_by, commit_sha
+            FROM runs
+            WHERE id = :id
+            """)
+            .param("id", id)
+            .query(ROW_MAPPER)
+            .optional();
+    }
 }

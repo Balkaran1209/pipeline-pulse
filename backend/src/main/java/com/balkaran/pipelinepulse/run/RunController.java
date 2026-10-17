@@ -30,6 +30,11 @@ public class RunController {
         return service.findByPipeline(pipelineId, status, limit, cursor);
     }
 
+    @GetMapping("/runs/{id}")
+    public RunDetails findById(@PathVariable("id") String id) {
+        return service.findById(id);
+    }
+
     @PostMapping("/pipelines/{pipelineId}/runs")
     public ResponseEntity<Run> create(
             @PathVariable("pipelineId") String pipelineId,
