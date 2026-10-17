@@ -26,6 +26,8 @@ ChatGPT / Codex for development guidance, explanations, and debugging.
 - Guided implementation of persistent pipeline creation idempotency,
   transaction handling, database locking, conflict responses, and an
   automated API verification script.
+- Guided implementation of run creation, request validation, database
+  mapping, and missing-pipeline handling.
 
 
 
@@ -106,6 +108,10 @@ This is running change, might add more occurances.
 - Verified requests without keys create separate pipelines.
 - Manually verified replay after an API restart preserves the original
   pipeline ID and creation timestamp.
+- Verified run creation returns HTTP 201 with queued status, a start
+  timestamp, and null completion time and duration.
+- Verified blank triggeredBy and missing commitSha return HTTP 400.
+- Verified creating a run for a missing pipeline returns HTTP 404.
 
 Application verification will be recorded as features are implemented.
 

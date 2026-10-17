@@ -64,7 +64,11 @@ Pipeline creation, listing, individual retrieval, partial updates, and
 deletion are implemented, with validation and structured JSON errors.
 
 Pipeline creation supports an optional Idempotency-Key header.
-Run and note APIs and frontend views are pending.
+Run creation is implemented. New runs start as queued, with a generated
+ID and start timestamp.
+
+Run listing, filtering, pagination, details, status updates, and live
+events are pending. Note APIs and frontend views are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string
