@@ -10,12 +10,20 @@ import java.util.Set;
 
 import com.balkaran.pipelinepulse.common.InvalidRequestException;
 import com.balkaran.pipelinepulse.note.NoteRepository;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RunService {
 
     private static final Set<String> VALID_STATUSES =
         Set.of("queued", "running", "passed", "failed", "flaky");
+    private static final Set<String> TERMINAL_STATUSES =
+        Set.of("passed", "failed", "flaky");
+
     private final RunRepository repository;
 
     private final NoteRepository noteRepository;
@@ -105,6 +113,48 @@ public class RunService {
         return RunDetails.from(
                 run,
                 noteRepository.findByRunId(id)
+        );
+    }
+    @Transactional
+    public Run updateStatus(String id, UpdateRunRequest request) {
+        Run current = repository.findByIdForUpdate(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Run not found: " + id)
+                );
+
+        String status = request.status();
+
+        if (current.status().equals(status)) {
+            return current;
+        }
+
+        Instant finishedAt = null;
+        Long durationMs = null;
+
+        if (TERMINAL_STATUSES.contains(status)) {
+            if (TERMINAL_STATUSES.contains(current.status())) {
+                finishedAt = current.finishedAt();
+            }
+
+            if (finishedAt == null) {
+                Instant now = Instant.now().truncatedTo(ChronoUnit.MICROS);
+
+                finishedAt = now.isBefore(current.startedAt())
+                        ? current.startedAt()
+                        : now;
+            }
+
+            durationMs = Duration.between(
+                    current.startedAt(),
+                    finishedAt
+            ).toMillis();
+        }
+
+        return repository.updateStatus(
+                id,
+                status,
+                finishedAt,
+                durationMs
         );
     }
 }

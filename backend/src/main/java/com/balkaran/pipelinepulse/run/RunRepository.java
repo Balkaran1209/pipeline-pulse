@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.time.Instant;
 
 @Repository
 public class RunRepository {
@@ -131,5 +132,47 @@ public class RunRepository {
             .param("id", id)
             .query(ROW_MAPPER)
             .optional();
+    }
+
+    public Optional<Run> findByIdForUpdate(String id) {
+    return jdbcClient.sql("""
+            SELECT id, pipeline_id, status, started_at,
+                   finished_at, duration_ms, triggered_by, commit_sha
+            FROM runs
+            WHERE id = :id
+            FOR UPDATE
+            """)
+            .param("id", id)
+            .query(ROW_MAPPER)
+            .optional();
+    }
+
+    public Run updateStatus(
+        String id,
+        String status,
+        Instant finishedAt,
+        Long durationMs
+    ) {
+        return jdbcClient.sql("""
+
+                UPDATE runs
+                SET status = :status,
+                    finished_at = CAST(:finishedAt AS TIMESTAMP WITH TIME ZONE),
+                    duration_ms = CAST(:durationMs AS BIGINT)
+                WHERE id = :id
+                RETURNING id, pipeline_id, status, started_at,
+                        finished_at, duration_ms, triggered_by, commit_sha
+                """)
+                .param("id", id)
+                .param("status", status)
+                .param(
+                        "finishedAt",
+                        finishedAt == null
+                                ? null
+                                : finishedAt.atOffset(ZoneOffset.UTC)
+                )
+                .param("durationMs", durationMs)
+                .query(ROW_MAPPER)
+                .single();
     }
 }

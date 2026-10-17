@@ -70,7 +70,8 @@ ID and start timestamp.
 Run creation, listing, status filtering, and cursor pagination are implemented.
 
 Run details are implemented and include associated notes.
-Run status updates and live events are pending.
+Run status updates and completion timing are implemented.
+Live run events are pending.
 Note APIs and frontend views are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
@@ -179,6 +180,26 @@ Notes are ordered by creation time ascending, then ID ascending.
 Runs without notes return an empty array. Missing runs return HTTP 404.
 
 Note creation and deletion endpoints are not implemented yet.
+
+## Run status updates
+
+PATCH /api/v1/runs/{id} accepts a required status: queued, running,
+passed, failed, or flaky.
+
+Completed statuses—passed, failed, and flaky—record finishedAt and
+calculate durationMs from the stored startedAt. Repeating the same status
+preserves existing values. Changes between completed statuses preserve
+completion timing.
+
+Moving back to queued or running clears finishedAt and durationMs.
+Finishing again records a new completion time. The original startedAt
+remains unchanged.
+
+Updates use a database transaction and row lock. Invalid input returns
+HTTP 400; a missing run returns HTTP 404.
+
+RunStatusTests verifies completion timing, repeated updates, corrections
+between completed statuses, reopening, and nonnegative duration.
 
 ## Database and migrations
 
