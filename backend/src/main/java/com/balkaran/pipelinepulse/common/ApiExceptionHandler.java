@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.http.MediaType;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -44,9 +45,10 @@ public class ApiExceptionHandler {
             ResourceNotFoundException exception
     ) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiError(
-                        new ErrorDetails("NOT_FOUND", exception.getMessage())
-                ));
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(new ApiError(
+                    new ErrorDetails("NOT_FOUND", exception.getMessage())
+        ));
     }
 
     @ExceptionHandler(InvalidRequestException.class)

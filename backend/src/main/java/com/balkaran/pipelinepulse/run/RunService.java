@@ -16,6 +16,10 @@ import java.time.temporal.ChronoUnit;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.balkaran.pipelinepulse.run.events.RunStatusChanged;
+
+import org.springframework.context.ApplicationEventPublisher;
+
 @Service
 public class RunService {
 
@@ -25,14 +29,17 @@ public class RunService {
         Set.of("passed", "failed", "flaky");
 
     private final RunRepository repository;
-
     private final NoteRepository noteRepository;
+    private final ApplicationEventPublisher eventPublisher;
+
     public RunService(
-        RunRepository repository,
-        NoteRepository noteRepository
+            RunRepository repository,
+            NoteRepository noteRepository,
+            ApplicationEventPublisher eventPublisher
     ) {
         this.repository = repository;
         this.noteRepository = noteRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public Run create(String pipelineId, CreateRunRequest request) {
@@ -150,11 +157,17 @@ public class RunService {
             ).toMillis();
         }
 
-        return repository.updateStatus(
+        Run updated = repository.updateStatus(
                 id,
                 status,
                 finishedAt,
                 durationMs
         );
+
+        eventPublisher.publishEvent(
+                new RunStatusChanged(updated.id())
+        );
+
+        return updated;
     }
 }

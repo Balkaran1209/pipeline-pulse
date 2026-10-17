@@ -64,14 +64,12 @@ Pipeline creation, listing, individual retrieval, partial updates, and
 deletion are implemented, with validation and structured JSON errors.
 
 Pipeline creation supports an optional Idempotency-Key header.
-Run creation is implemented. New runs start as queued, with a generated
-ID and start timestamp.
-
 Run creation, listing, status filtering, and cursor pagination are implemented.
+New runs start as queued, with a generated ID and start timestamp.
 
 Run details are implemented and include associated notes.
 Run status updates and completion timing are implemented.
-Live run events are pending.
+Live run-status streaming through Server-Sent Events is implemented.
 Note creation and deletion are implemented.
 Frontend views are pending.
 
@@ -200,6 +198,24 @@ HTTP 400; a missing run returns HTTP 404.
 
 RunStatusTests verifies completion timing, repeated updates, corrections
 between completed statuses, reopening, and nonnegative duration.
+
+## Live run events
+
+GET /api/v1/runs/{id}/events opens a Server-Sent Events stream.
+
+The stream immediately sends the current status, then sends updates when
+the status changes. Data messages contain JSON such as {"status":"running"}.
+Keep-alive comments are sent every 15 seconds.
+
+Disconnected subscribers are removed. A missing run returns HTTP 404
+with a structured JSON error.
+
+Streaming works directly on port 8080 and through the frontend's Nginx
+proxy on port 3000.
+
+RunEventsCleanupTests verifies 50 sequential connections and disconnections,
+checking that no subscribers remain registered after each disconnection.
+This backend test is separate from the pending frontend navigation checks.
 
 ## Notes
 
