@@ -61,5 +61,17 @@ export function usePipelines() {
         }
     })
   }
-  return { state, reload, replacePipeline }
+  function removePipeline(id: string) {
+    setState(current => {
+        if (current.status !== 'success') {
+        return current
+        }
+
+        return {
+        ...current,
+        items: current.items.filter(pipeline => pipeline.id !== id),
+        }
+    })
+  }
+  return { state, reload, replacePipeline, removePipeline }
 }

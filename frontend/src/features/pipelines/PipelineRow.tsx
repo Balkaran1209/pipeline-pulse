@@ -3,10 +3,12 @@ import type { FormEvent } from 'react'
 import { Link } from 'react-router'
 import type { Pipeline } from '../../api/types'
 import { useRenamePipeline } from './useRenamePipeline'
+import DeletePipelineAction from './DeletePipelineAction'
 
 interface PipelineRowProps {
   pipeline: Pipeline
   onRenamed: (pipeline: Pipeline) => void
+  onDeleted: (id: string) => void
 }
 
 const productLabels = {
@@ -18,22 +20,25 @@ const productLabels = {
 export default function PipelineRow({
   pipeline,
   onRenamed,
+  onDeleted,
 }: PipelineRowProps) {
-  const [editing, setEditing] = useState(false)
+  const [mode, setMode] = useState<'view' | 'rename' | 'delete'>(
+    'view',
+  )
   const [name, setName] = useState(pipeline.name)
   const { state, rename, reset } = useRenamePipeline()
-
+  const editing = mode === 'rename'
   const busy = state.status === 'saving'
 
   function beginEditing() {
     reset()
     setName(pipeline.name)
-    setEditing(true)
+    setMode('rename')
   }
 
   function cancelEditing() {
     reset()
-    setEditing(false)
+    setMode('view')
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -43,7 +48,7 @@ export default function PipelineRow({
 
     if (updated !== null) {
       onRenamed(updated)
-      setEditing(false)
+      setMode('view')
     }
   }
 
@@ -108,14 +113,33 @@ export default function PipelineRow({
       </td>
 
       <td>
-        <button
-          className="button button-secondary"
-          type="button"
-          onClick={beginEditing}
-          disabled={editing}
-        >
-          Rename
-        </button>
+        {mode === 'delete' ? (
+            <DeletePipelineAction
+            pipeline={pipeline}
+            onDeleted={onDeleted}
+            onCancel={() => setMode('view')}
+            />
+        ) : (
+            <div className="row-actions">
+            <button
+                className="button button-secondary"
+                type="button"
+                onClick={beginEditing}
+                disabled={editing}
+            >
+                Rename
+            </button>
+
+            <button
+                className="button button-danger"
+                type="button"
+                onClick={() => setMode('delete')}
+                disabled={editing}
+            >
+                Delete
+            </button>
+            </div>
+        )}
       </td>
     </tr>
   )

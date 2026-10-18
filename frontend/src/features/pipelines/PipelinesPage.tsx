@@ -3,7 +3,7 @@ import PipelineRow from './PipelineRow'
 import { usePipelines } from './usePipelines'
 
 export default function PipelinesPage() {
-  const { state, reload, replacePipeline } = usePipelines()
+  const { state, reload, replacePipeline, removePipeline } = usePipelines()
 
   return (
     <section aria-labelledby="pipelines-title">
@@ -56,6 +56,7 @@ export default function PipelinesPage() {
                   key={pipeline.id}
                   pipeline={pipeline}
                   onRenamed={replacePipeline}
+                  onDeleted={removePipeline}
                 />
               ))}
             </tbody>

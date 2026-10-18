@@ -93,7 +93,14 @@ blank-name validation, submission guarding, and error recovery.
 Successful renames update the displayed row using the API response.
 Pending rename requests are cancelled when the row unmounts.
 
-Pipeline deletion controls are pending.
+Inline pipeline deletion is implemented with confirmation explaining
+that associated runs and notes will also be deleted.
+
+Successful deletion removes the row. Failures retain the row and allow
+retrying. A NOT_FOUND response also removes the stale row because the
+pipeline is already absent.
+
+The pipelines screen supports listing, creation, renaming, and deletion.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string
