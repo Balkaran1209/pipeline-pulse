@@ -316,3 +316,12 @@
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+.run-status-form {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #dce3eb;
+}
+
+.run-status-form .form-field {
+  flex: 0 1 16rem;
+}

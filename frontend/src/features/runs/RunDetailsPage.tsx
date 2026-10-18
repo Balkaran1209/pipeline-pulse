@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import RunStatusBadge from '../../components/RunStatusBadge'
 import { useRunDetails } from './useRunDetails'
+import UpdateRunStatusForm from './UpdateRunStatusForm'
 
 interface RunDetailsPageProps {
   runId: string
@@ -17,7 +18,7 @@ function Timestamp({ value }: { value: string }) {
 export default function RunDetailsPage({
   runId,
 }: RunDetailsPageProps) {
-  const { state, reload } = useRunDetails(runId)
+  const { state, reload, replaceRun } = useRunDetails(runId)
 
   return (
     <section>
@@ -105,6 +106,11 @@ export default function RunDetailsPage({
                 <dd><code>{state.run.commitSha}</code></dd>
               </div>
             </dl>
+            <UpdateRunStatusForm
+              runId={state.run.id}
+              status={state.run.status}
+              onUpdated={replaceRun}
+            />
           </section>
 
           <section

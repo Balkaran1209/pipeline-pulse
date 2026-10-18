@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ApiError } from '../../api/client'
 import { runApi } from '../../api/runs'
-import type { RunDetails } from '../../api/types'
+import type { Run, RunDetails } from '../../api/types'
 
 type RunDetailsState =
   | { status: 'loading' }
@@ -51,6 +51,23 @@ export function useRunDetails(runId: string) {
     setState({ status: 'loading' })
     setReloadKey(value => value + 1)
   }
+  function replaceRun(updated: Run) {
+    setState(current => {
+      if (
+        current.status !== 'success'
+        || current.run.id !== updated.id
+      ) {
+        return current
+      }
 
-  return { state, reload }
+      return {
+        status: 'success',
+        run: {
+          ...current.run,
+          ...updated,
+        },
+      }
+    })
+  }
+  return { state, reload, replaceRun }
 }

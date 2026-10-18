@@ -127,7 +127,11 @@ times, duration, full commit SHA, and existing triage notes.
 It supports loading, empty notes, missing-run errors, and retry after
 API failures. Pending requests are cancelled when leaving the page.
 
-Frontend status updates, note creation/deletion, and live events are pending.
+Frontend run status updates are implemented. Successful updates refresh
+the status badge and completion timing while preserving existing notes.
+The form prevents overlapping submissions and supports retry after failure.
+
+Frontend note creation/deletion and live events are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string

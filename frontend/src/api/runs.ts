@@ -43,6 +43,20 @@ export const runApi = {
       { signal },
     )
   },
+  updateStatus(
+    id: string,
+    status: RunStatus,
+    signal?: AbortSignal,
+  ): Promise<Run> {
+    return requestJson<Run>(
+      `/runs/${encodeURIComponent(id)}`,
+      {
+        method: 'PATCH',
+        body: { status },
+        signal,
+      },
+    )
+  },
   create(
     pipelineId: string,
     input: CreateRunInput,
