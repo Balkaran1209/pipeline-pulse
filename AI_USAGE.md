@@ -59,6 +59,7 @@ row locking, completion timing, and automated database tests.
 - Frontend run status controls and synchronization of updated run details.
 - Frontend triage note creation, validation, and failure handling.
 - Frontend note deletion with confirmation and failure recovery.
+- Frontend SSE integration, reconnection, and development proxy cleanup.
 
 
 
@@ -101,6 +102,8 @@ Implementation prompts will be recorded as development proceeds.
     because a started database container may not yet accept connections.
 
 - In backend/src/main/java/com/balkaran/pipelinepulse/pipeline/PipelineController.java, required = false was made instead of true for idempotency key. Since true adds a stricter rule than the assignment asks for. The document says: “POST /pipelines must be idempotent when the client sends an Idempotency-Key header.” So the header is optional in the assignment. The backend must prevent duplicates when a client sends a key; the document does not require every request to include one.
+
+- Reworked the initial Vite proxy configuration after testing showed that stopping the API left the browser's SSE connection appearing open. Added stream error and closure forwarding, then verified automatic disconnection detection and reconnection.
     
 
 
@@ -225,6 +228,8 @@ This is running change, might add more occurances.
   refresh, and the empty-notes state after deleting the last note.
 - Verified recovery after an API failure and deletion of stale notes
   already removed in another tab.
+- Verified automatic detection of API disconnection and automatic
+  reconnection after restarting the API.
 
 Application verification will be recorded as features are implemented.
 
@@ -234,4 +239,4 @@ Application verification will be recorded as features are implemented.
 - Date: 2026-10-17.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
-  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs, frontend/vite.config.ts, frontend/src/main.tsx, frontend/src/App.tsx, frontend/src/index.css, frontend/src/App.css, frontend/src/api/types.ts, frontend/src/api/client.ts, frontend/src/api/pipelines.ts, frontend/src/features/pipelines/usePipelines.ts, frontend/src/features/pipelines/PipelinesPage.tsx,frontend/src/features/pipelines/useCreatePipeline.ts, frontend/src/features/pipelines/CreatePipelineForm.tsx, frontend/src/features/pipelines/useRenamePipeline.ts, frontend/src/features/pipelines/PipelineRow.tsx, frontend/src/features/pipelines/useDeletePipeline.ts, frontend/src/features/pipelines/DeletePipelineAction.tsxfrontend/src/api/runs.ts, frontend/src/features/runs/usePipelineRuns.ts, frontend/src/features/runs/PipelineRunsPage.tsx, frontend/src/components/RunStatusBadge.tsx, frontend/src/features/runs/RunsTable.tsx, frontend/src/features/runs/CreateRunForm.tsx, frontend/src/features/runs/useCreateRun.ts, frontend/src/features/runs/RunDetailsPage.tsx, frontend/src/features/runs/useRunDetails.ts, frontend/src/features/runs/UpdateRunStatusForm.tsx, frontend/src/features/runs/useUpdateRunStatus.ts, frontend/src/api/notes.ts, frontend/src/features/notes/CreateNoteForm.tsx, frontend/src/features/notes/useCreateNote.ts frontend/src/features/notes/DeleteNoteAction.tsx, frontend/src/features/notes/useDeleteNote.ts.
+  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs, frontend/vite.config.ts, frontend/src/main.tsx, frontend/src/App.tsx, frontend/src/index.css, frontend/src/App.css, frontend/src/api/types.ts, frontend/src/api/client.ts, frontend/src/api/pipelines.ts, frontend/src/features/pipelines/usePipelines.ts, frontend/src/features/pipelines/PipelinesPage.tsx,frontend/src/features/pipelines/useCreatePipeline.ts, frontend/src/features/pipelines/CreatePipelineForm.tsx, frontend/src/features/pipelines/useRenamePipeline.ts, frontend/src/features/pipelines/PipelineRow.tsx, frontend/src/features/pipelines/useDeletePipeline.ts, frontend/src/features/pipelines/DeletePipelineAction.tsxfrontend/src/api/runs.ts, frontend/src/features/runs/usePipelineRuns.ts, frontend/src/features/runs/PipelineRunsPage.tsx, frontend/src/components/RunStatusBadge.tsx, frontend/src/features/runs/RunsTable.tsx, frontend/src/features/runs/CreateRunForm.tsx, frontend/src/features/runs/useCreateRun.ts, frontend/src/features/runs/RunDetailsPage.tsx, frontend/src/features/runs/useRunDetails.ts, frontend/src/features/runs/UpdateRunStatusForm.tsx, frontend/src/features/runs/useUpdateRunStatus.ts, frontend/src/api/notes.ts, frontend/src/features/notes/CreateNoteForm.tsx, frontend/src/features/notes/useCreateNote.ts frontend/src/features/notes/DeleteNoteAction.tsx, frontend/src/features/notes/useDeleteNote.ts, frontend/src/features/runs/RunLiveUpdates.tsx.
