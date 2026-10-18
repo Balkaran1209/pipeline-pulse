@@ -72,8 +72,6 @@ This record will be updated during implementation.
 
 ## Representative prompts
 
-- "Help me write initial Readme and AI_usage for this project, lets create a template before starting."
-- "Lets check all the prerequisite installations."
 - "Help me build a schema(we will use this to generate migration file), i have shared the entities, below is the relation between them
     Pipelines: id is the primary key since it uniquely identifies each pipeline.
     Runs: id is the PK. pipeline_id is a foreign key (FK) referencing pipelines.id.
@@ -246,7 +244,7 @@ Application verification will be recorded as features are implemented.
 ## Assistant Attestation
 
 - Model: GPT-6 (Codex).
-- Date: 2026-10-17.
+- Date: 2026-10-18.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
   backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs, frontend/vite.config.ts, frontend/src/main.tsx, frontend/src/App.tsx, frontend/src/index.css, frontend/src/App.css, frontend/src/api/types.ts, frontend/src/api/client.ts, frontend/src/api/pipelines.ts, frontend/src/features/pipelines/usePipelines.ts, frontend/src/features/pipelines/PipelinesPage.tsx,frontend/src/features/pipelines/useCreatePipeline.ts, frontend/src/features/pipelines/CreatePipelineForm.tsx, frontend/src/features/pipelines/useRenamePipeline.ts, frontend/src/features/pipelines/PipelineRow.tsx, frontend/src/features/pipelines/useDeletePipeline.ts, frontend/src/features/pipelines/DeletePipelineAction.tsxfrontend/src/api/runs.ts, frontend/src/features/runs/usePipelineRuns.ts, frontend/src/features/runs/PipelineRunsPage.tsx, frontend/src/components/RunStatusBadge.tsx, frontend/src/features/runs/RunsTable.tsx, frontend/src/features/runs/CreateRunForm.tsx, frontend/src/features/runs/useCreateRun.ts, frontend/src/features/runs/RunDetailsPage.tsx, frontend/src/features/runs/useRunDetails.ts, frontend/src/features/runs/UpdateRunStatusForm.tsx, frontend/src/features/runs/useUpdateRunStatus.ts, frontend/src/api/notes.ts, frontend/src/features/notes/CreateNoteForm.tsx, frontend/src/features/notes/useCreateNote.ts frontend/src/features/notes/DeleteNoteAction.tsx, frontend/src/features/notes/useDeleteNote.ts, frontend/src/features/runs/RunLiveUpdates.tsx, frontend/playwright.config.ts , frontend/tsconfig.e2e.json, frontend/e2e/resource-probe.js, frontend/e2e/navigation-cleanup.spec.ts.
