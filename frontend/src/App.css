@@ -325,3 +325,23 @@
 .run-status-form .form-field {
   flex: 0 1 16rem;
 }
+.create-note-form {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-field textarea {
+  width: 100%;
+  padding: 0.625rem;
+  border: 1px solid #8291a3;
+  border-radius: 0.375rem;
+  background: white;
+  color: inherit;
+  resize: vertical;
+}
+
+.create-note-form .form-error,
+.create-note-form .form-success {
+  margin: 0;
+}

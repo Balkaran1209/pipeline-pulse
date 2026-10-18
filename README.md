@@ -131,7 +131,12 @@ Frontend run status updates are implemented. Successful updates refresh
 the status badge and completion timing while preserving existing notes.
 The form prevents overlapping submissions and supports retry after failure.
 
-Frontend note creation/deletion and live events are pending.
+Frontend note creation is implemented with required author and body fields.
+Saved notes appear immediately, preserve body formatting, and persist after
+refresh. Failed submissions retain entered values. Pending submissions
+are cancelled when leaving the page.
+
+Frontend note deletion and live events are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string

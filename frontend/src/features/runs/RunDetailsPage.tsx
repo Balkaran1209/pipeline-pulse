@@ -2,6 +2,7 @@ import { Link } from 'react-router'
 import RunStatusBadge from '../../components/RunStatusBadge'
 import { useRunDetails } from './useRunDetails'
 import UpdateRunStatusForm from './UpdateRunStatusForm'
+import CreateNoteForm from '../notes/CreateNoteForm'
 
 interface RunDetailsPageProps {
   runId: string
@@ -18,7 +19,7 @@ function Timestamp({ value }: { value: string }) {
 export default function RunDetailsPage({
   runId,
 }: RunDetailsPageProps) {
-  const { state, reload, replaceRun } = useRunDetails(runId)
+  const { state, reload, replaceRun, addNote } = useRunDetails(runId)
 
   return (
     <section>
@@ -118,7 +119,10 @@ export default function RunDetailsPage({
             aria-labelledby="run-notes-title"
           >
             <h2 id="run-notes-title">Triage notes</h2>
-
+            <CreateNoteForm
+              runId={state.run.id}
+              onCreated={addNote}
+            />
             {state.run.notes.length === 0 ? (
               <p role="status">No notes yet.</p>
             ) : (

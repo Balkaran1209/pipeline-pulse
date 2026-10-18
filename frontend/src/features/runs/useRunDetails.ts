@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ApiError } from '../../api/client'
 import { runApi } from '../../api/runs'
-import type { Run, RunDetails } from '../../api/types'
+import type { Note, Run, RunDetails } from '../../api/types'
 
 type RunDetailsState =
   | { status: 'loading' }
@@ -69,5 +69,24 @@ export function useRunDetails(runId: string) {
       }
     })
   }
-  return { state, reload, replaceRun }
+  function addNote(note: Note) {
+    setState(current => {
+      if (
+        current.status !== 'success'
+        || current.run.id !== note.runId
+        || current.run.notes.some(existing => existing.id === note.id)
+      ) {
+        return current
+      }
+
+      return {
+        status: 'success',
+        run: {
+          ...current.run,
+          notes: [...current.run.notes, note],
+        },
+      }
+    })
+  }
+  return { state, reload, replaceRun, addNote }
 }

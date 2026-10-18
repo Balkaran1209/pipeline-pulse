@@ -53,3 +53,8 @@ export interface CreateRunInput {
   triggeredBy: string
   commitSha: string
 }
+
+export interface CreateNoteInput {
+  author: string
+  body: string
+}

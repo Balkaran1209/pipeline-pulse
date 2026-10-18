@@ -57,6 +57,7 @@ row locking, completion timing, and automated database tests.
 - Frontend run creation, form validation, and recovery after API failures.
 - Frontend run details, existing notes display, and loading/error recovery.
 - Frontend run status controls and synchronization of updated run details.
+- Frontend triage note creation, validation, and failure handling.
 
 
 
@@ -215,6 +216,10 @@ This is running change, might add more occurances.
   completed statuses, and clearing timing when reopening a run.
 - Verified persistence after browser refresh, disabling unchanged-status
   submissions, and recovery after an API failure.
+- Verified immediate note display, multiline formatting, persistence after
+  refresh, and separation between runs.
+- Verified empty and whitespace-only input rejection and preservation
+  of entered values after an API failure.
 
 Application verification will be recorded as features are implemented.
 
@@ -224,4 +229,4 @@ Application verification will be recorded as features are implemented.
 - Date: 2026-10-17.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
-  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs, frontend/vite.config.ts, frontend/src/main.tsx, frontend/src/App.tsx, frontend/src/index.css, frontend/src/App.css, frontend/src/api/types.ts, frontend/src/api/client.ts, frontend/src/api/pipelines.ts, frontend/src/features/pipelines/usePipelines.ts, frontend/src/features/pipelines/PipelinesPage.tsx,frontend/src/features/pipelines/useCreatePipeline.ts, frontend/src/features/pipelines/CreatePipelineForm.tsx, frontend/src/features/pipelines/useRenamePipeline.ts, frontend/src/features/pipelines/PipelineRow.tsx, frontend/src/features/pipelines/useDeletePipeline.ts, frontend/src/features/pipelines/DeletePipelineAction.tsxfrontend/src/api/runs.ts, frontend/src/features/runs/usePipelineRuns.ts, frontend/src/features/runs/PipelineRunsPage.tsx, frontend/src/components/RunStatusBadge.tsx, frontend/src/features/runs/RunsTable.tsx, frontend/src/features/runs/CreateRunForm.tsx, frontend/src/features/runs/useCreateRun.ts, frontend/src/features/runs/RunDetailsPage.tsx, frontend/src/features/runs/useRunDetails.ts, frontend/src/features/runs/UpdateRunStatusForm.tsx, frontend/src/features/runs/useUpdateRunStatus.ts.
+  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs, frontend/vite.config.ts, frontend/src/main.tsx, frontend/src/App.tsx, frontend/src/index.css, frontend/src/App.css, frontend/src/api/types.ts, frontend/src/api/client.ts, frontend/src/api/pipelines.ts, frontend/src/features/pipelines/usePipelines.ts, frontend/src/features/pipelines/PipelinesPage.tsx,frontend/src/features/pipelines/useCreatePipeline.ts, frontend/src/features/pipelines/CreatePipelineForm.tsx, frontend/src/features/pipelines/useRenamePipeline.ts, frontend/src/features/pipelines/PipelineRow.tsx, frontend/src/features/pipelines/useDeletePipeline.ts, frontend/src/features/pipelines/DeletePipelineAction.tsxfrontend/src/api/runs.ts, frontend/src/features/runs/usePipelineRuns.ts, frontend/src/features/runs/PipelineRunsPage.tsx, frontend/src/components/RunStatusBadge.tsx, frontend/src/features/runs/RunsTable.tsx, frontend/src/features/runs/CreateRunForm.tsx, frontend/src/features/runs/useCreateRun.ts, frontend/src/features/runs/RunDetailsPage.tsx, frontend/src/features/runs/useRunDetails.ts, frontend/src/features/runs/UpdateRunStatusForm.tsx, frontend/src/features/runs/useUpdateRunStatus.ts, frontend/src/api/notes.ts, frontend/src/features/notes/CreateNoteForm.tsx, frontend/src/features/notes/useCreateNote.ts.
