@@ -114,7 +114,14 @@ Loading another page preserves existing rows. Failures show an error
 with retry support, and the Load more button disappears when no further
 pages remain. Pending requests are cancelled when leaving the page.
 
-Frontend run creation is pending.
+Frontend run creation is implemented with required trigger author and
+commit SHA fields. Successful creation resets the status filter and
+refreshes the list to show the new queued run.
+
+The form preserves entered values after a failure. When creation cannot
+be confirmed, users can refresh the run list before submitting again.
+Run creation requests are not automatically retried.
+
 The run-details screen currently shows a page shell.
 
 Pipeline updates accept name, product, or both. Omitted fields remain

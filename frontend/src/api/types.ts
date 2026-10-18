@@ -48,3 +48,8 @@ export interface CreatePipelineInput {
 }
 
 export type UpdatePipelineInput = Partial<CreatePipelineInput>
+
+export interface CreateRunInput {
+  triggeredBy: string
+  commitSha: string
+}

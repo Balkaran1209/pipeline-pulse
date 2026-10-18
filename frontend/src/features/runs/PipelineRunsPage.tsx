@@ -1,6 +1,7 @@
 import type { RunStatus } from '../../api/types'
 import RunsTable from './RunsTable'
 import { usePipelineRuns } from './usePipelineRuns'
+import CreateRunForm from './CreateRunForm'
 
 interface PipelineRunsPageProps {
   pipelineId: string
@@ -15,6 +16,7 @@ export default function PipelineRunsPage({
     changeStatus,
     reload,
     loadMore,
+    showLatestRuns,
   } = usePipelineRuns(pipelineId)
 
   return (
@@ -27,7 +29,12 @@ export default function PipelineRunsPage({
         </h1>
         <p>Recent pipeline runs, newest first.</p>
       </div>
-
+      <CreateRunForm
+        pipelineId={pipelineId}
+        disabled={state.status !== 'success'}
+        onCreated={showLatestRuns}
+        onRefresh={showLatestRuns}
+      />
       <div className="run-controls">
         <div className="form-field">
           <label htmlFor="run-status-filter">Status</label>

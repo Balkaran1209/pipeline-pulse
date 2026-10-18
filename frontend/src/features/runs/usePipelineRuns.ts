@@ -174,6 +174,10 @@ export function usePipelineRuns(pipelineId: string) {
       }
     }
   }
+  function showLatestRuns() {
+    setStatusFilter('')
+    reload()
+  }
 
-  return { state, statusFilter, changeStatus, reload, loadMore }
+  return { state, statusFilter, changeStatus, reload, loadMore, showLatestRuns }
 }

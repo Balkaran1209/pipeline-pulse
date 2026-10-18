@@ -1,5 +1,10 @@
 import { requestJson } from './client'
-import type { RunPage, RunStatus } from './types'
+import type {
+  CreateRunInput,
+  Run,
+  RunPage,
+  RunStatus,
+} from './types'
 
 interface RunListOptions {
   status?: RunStatus
@@ -28,6 +33,21 @@ export const runApi = {
     return requestJson<RunPage>(
       `/pipelines/${encodeURIComponent(pipelineId)}/runs?${params}`,
       { signal: options.signal },
+    )
+  },
+
+  create(
+    pipelineId: string,
+    input: CreateRunInput,
+    signal?: AbortSignal,
+  ): Promise<Run> {
+    return requestJson<Run>(
+      `/pipelines/${encodeURIComponent(pipelineId)}/runs`,
+      {
+        method: 'POST',
+        body: input,
+        signal,
+      },
     )
   },
 }
