@@ -1,14 +1,7 @@
 import { Link, Route, Routes, useParams } from 'react-router'
+import PipelinesPage from './features/pipelines/PipelinesPage'
 import './App.css'
 
-function PipelinesPage() {
-  return (
-    <section>
-      <h1>Pipelines</h1>
-      <p>View and manage your CI pipelines.</p>
-    </section>
-  )
-}
 
 function PipelineRunsPage() {
   const { id } = useParams()

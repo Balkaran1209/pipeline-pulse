@@ -28,3 +28,74 @@
 .app-main p {
   overflow-wrap: anywhere;
 }
+
+.page-heading {
+  margin-bottom: 1.5rem;
+}
+
+.page-heading h1 {
+  margin-bottom: 0.5rem;
+}
+
+.page-heading p {
+  margin: 0;
+  color: #526174;
+}
+
+.notice {
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid #dce3eb;
+  border-radius: 0.5rem;
+}
+
+.notice-error {
+  border-color: #b91c1c;
+}
+
+.notice-error p {
+  margin-top: 0;
+}
+
+.button {
+  padding: 0.625rem 1rem;
+  border: 1px solid #075985;
+  border-radius: 0.375rem;
+  background: #075985;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #0c4a6e;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  border: 1px solid #dce3eb;
+  border-radius: 0.5rem;
+}
+
+.data-table {
+  width: 100%;
+  min-width: 32rem;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.data-table th,
+.data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #dce3eb;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.data-table th {
+  background: #eef2f6;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}

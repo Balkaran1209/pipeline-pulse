@@ -75,8 +75,14 @@ Seed-data import is implemented and verified, including repeat execution
 and persistence across an API restart.
 
 Frontend routing is implemented for the pipelines list, pipeline runs,
-and run details, with a fallback for unknown URLs. These currently show
-page shells; data fetching and management controls are pending.
+and run details, with a fallback for unknown URLs.
+
+The pipelines page loads records from the API and includes loading,
+empty, and error states, plus retry support. Pipeline names link to
+their runs pages. List requests are cancelled when the page unmounts.
+
+Pipeline creation, renaming, and deletion controls are pending.
+The runs and run-details pages currently show page shells.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string
