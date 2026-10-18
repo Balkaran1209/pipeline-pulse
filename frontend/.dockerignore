@@ -7,3 +7,5 @@ test-results/
 *.log
 .env
 .env.*
+playwright-report/
+test-results/

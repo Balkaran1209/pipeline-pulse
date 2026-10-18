@@ -181,6 +181,50 @@ To verify the frontend:
 The Vite development server forwards /api requests to the API on port 8080.
 Keep the API running while developing the frontend locally.
 
+### Browser cleanup verification
+
+Keep the Docker stack running and the Vite development server stopped.
+The browser test uses the application served through Nginx on port 3000.
+
+From the repository root:
+
+```bash
+nvm use
+cd frontend
+npm ci
+npx playwright install chromium
+npm run test:e2e
+```
+
+The test creates its own pipeline and run, performs 50 navigation cycles,
+and deletes its test data afterward. It verifies that EventSource connections
+and application timers return to zero after navigation, checks listener,
+DOM, and heap measurements, and detects accidental full-page reloads.
+
+Measurements are taken after two animation frames and garbage collection,
+using cycle 10 as the warmed-up baseline. Regression allowances are
+1 MiB of heap, 5 listeners, and 30 DOM nodes above that baseline.
+
+The test also verifies cancellation of a pending reconnect timer and
+abortion of an in-flight run-details request.
+
+For a longer diagnostic:
+
+```bash
+NAVIGATION_CYCLES=200 npm run test:e2e
+```
+
+The recorded 200-cycle diagnostic passed: after returning home, open
+EventSources and timers remained at zero, listeners stayed at 189,
+and DOM nodes stayed at 235. Heap usage increased from 3.638 MiB at
+cycle 10 to 4.383 MiB at cycle 200, within the configured allowance.
+
+To inspect the latest HTML report:
+
+```bash
+npx playwright show-report
+```
+
 ## Backend development
 
 Keep Docker Desktop running.
