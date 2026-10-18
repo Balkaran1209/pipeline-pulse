@@ -74,7 +74,9 @@ Note creation and deletion are implemented.
 Seed-data import is implemented and verified, including repeat execution
 and persistence across an API restart.
 
-Frontend views are pending.
+Frontend routing is implemented for the pipelines list, pipeline runs,
+and run details, with a fallback for unknown URLs. These currently show
+page shells; data fetching and management controls are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string
@@ -107,6 +109,8 @@ To verify the frontend:
 
     npm run build
     npm run lint
+The Vite development server forwards /api requests to the API on port 8080.
+Keep the API running while developing the frontend locally.
 
 ## Backend development
 
