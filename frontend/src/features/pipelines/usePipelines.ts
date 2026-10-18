@@ -47,6 +47,19 @@ export function usePipelines() {
     setState({ status: 'loading' })
     setReloadKey(current => current + 1)
   }
+  function replacePipeline(updated: Pipeline) {
+    setState(current => {
+        if (current.status !== 'success') {
+        return current
+        }
 
-  return { state, reload }
+        return {
+        ...current,
+        items: current.items.map(pipeline =>
+            pipeline.id === updated.id ? updated : pipeline,
+        ),
+        }
+    })
+  }
+  return { state, reload, replacePipeline }
 }

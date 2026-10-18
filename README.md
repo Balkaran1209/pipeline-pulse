@@ -88,7 +88,12 @@ Retries with unchanged details reuse the same idempotency key while the
 form remains mounted. Controls are disabled during submission, and pending
 creation requests are cancelled when the form unmounts.
 
-Pipeline renaming and deletion controls are pending.
+Inline pipeline renaming is implemented with Save and Cancel controls,
+blank-name validation, submission guarding, and error recovery.
+Successful renames update the displayed row using the API response.
+Pending rename requests are cancelled when the row unmounts.
+
+Pipeline deletion controls are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string

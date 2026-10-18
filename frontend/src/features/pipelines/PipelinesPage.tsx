@@ -1,15 +1,9 @@
-import { Link } from 'react-router'
-import { usePipelines } from './usePipelines'
 import CreatePipelineForm from './CreatePipelineForm'
-
-const productLabels = {
-  flasharray: 'FlashArray',
-  flashblade: 'FlashBlade',
-  hyperscale: 'Hyperscale',
-}
+import PipelineRow from './PipelineRow'
+import { usePipelines } from './usePipelines'
 
 export default function PipelinesPage() {
-  const { state, reload } = usePipelines()
+  const { state, reload, replacePipeline } = usePipelines()
 
   return (
     <section aria-labelledby="pipelines-title">
@@ -17,6 +11,7 @@ export default function PipelinesPage() {
         <h1 id="pipelines-title">Pipelines</h1>
         <p>View your CI pipelines and explore their runs.</p>
       </div>
+
       <CreatePipelineForm onCreated={reload} />
 
       {state.status === 'loading' && (
@@ -51,26 +46,17 @@ export default function PipelinesPage() {
                 <th scope="col">Name</th>
                 <th scope="col">Product</th>
                 <th scope="col">Created</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
 
             <tbody>
               {state.items.map(pipeline => (
-                <tr key={pipeline.id} data-testid="pipeline-row">
-                  <td>
-                    <Link
-                      to={`/pipelines/${encodeURIComponent(pipeline.id)}`}
-                    >
-                      {pipeline.name}
-                    </Link>
-                  </td>
-                  <td>{productLabels[pipeline.product]}</td>
-                  <td>
-                    <time dateTime={pipeline.createdAt}>
-                      {new Date(pipeline.createdAt).toLocaleString()}
-                    </time>
-                  </td>
-                </tr>
+                <PipelineRow
+                  key={pipeline.id}
+                  pipeline={pipeline}
+                  onRenamed={replacePipeline}
+                />
               ))}
             </tbody>
           </table>
