@@ -1,4 +1,4 @@
-import { requestJson } from './client'
+import { requestJson, requestNoContent } from './client'
 import type { CreateNoteInput, Note } from './types'
 
 export const noteApi = {
@@ -12,6 +12,16 @@ export const noteApi = {
       {
         method: 'POST',
         body: input,
+        signal,
+      },
+    )
+  },
+
+  remove(id: string, signal?: AbortSignal): Promise<void> {
+    return requestNoContent(
+      `/notes/${encodeURIComponent(id)}`,
+      {
+        method: 'DELETE',
         signal,
       },
     )

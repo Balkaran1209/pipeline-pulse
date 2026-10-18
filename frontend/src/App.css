@@ -345,3 +345,6 @@
 .create-note-form .form-success {
   margin: 0;
 }
+.note-delete-action {
+  margin-top: 1rem;
+}

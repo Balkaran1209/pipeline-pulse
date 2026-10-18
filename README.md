@@ -136,7 +136,11 @@ Saved notes appear immediately, preserve body formatting, and persist after
 refresh. Failed submissions retain entered values. Pending submissions
 are cancelled when leaving the page.
 
-Frontend note deletion and live events are pending.
+Frontend note deletion is implemented with confirmation, cancellation,
+and retry after failure. Notes already deleted in another tab are removed
+from the current view without an error.
+
+Frontend live events are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string

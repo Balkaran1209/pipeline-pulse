@@ -88,5 +88,20 @@ export function useRunDetails(runId: string) {
       }
     })
   }
-  return { state, reload, replaceRun, addNote }
+  function removeNote(noteId: string) {
+    setState(current => {
+      if (current.status !== 'success') {
+        return current
+      }
+
+      return {
+        status: 'success',
+        run: {
+          ...current.run,
+          notes: current.run.notes.filter(note => note.id !== noteId),
+        },
+      }
+    })
+  }
+  return { state, reload, replaceRun, addNote, removeNote }
 }

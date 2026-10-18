@@ -3,6 +3,7 @@ import RunStatusBadge from '../../components/RunStatusBadge'
 import { useRunDetails } from './useRunDetails'
 import UpdateRunStatusForm from './UpdateRunStatusForm'
 import CreateNoteForm from '../notes/CreateNoteForm'
+import DeleteNoteAction from '../notes/DeleteNoteAction'
 
 interface RunDetailsPageProps {
   runId: string
@@ -19,7 +20,7 @@ function Timestamp({ value }: { value: string }) {
 export default function RunDetailsPage({
   runId,
 }: RunDetailsPageProps) {
-  const { state, reload, replaceRun, addNote } = useRunDetails(runId)
+  const { state, reload, replaceRun, addNote, removeNote } = useRunDetails(runId)
 
   return (
     <section>
@@ -134,6 +135,10 @@ export default function RunDetailsPage({
                       <Timestamp value={note.createdAt} />
                     </div>
                     <p className="run-note-body">{note.body}</p>
+                    <DeleteNoteAction
+                      noteId={note.id}
+                      onDeleted={removeNote}
+                    />
                   </li>
                 ))}
               </ol>
