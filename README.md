@@ -335,7 +335,7 @@ proxy on port 3000.
 
 RunEventsCleanupTests verifies 50 sequential connections and disconnections,
 checking that no subscribers remain registered after each disconnection.
-This backend test is separate from the pending frontend navigation checks.
+This backend test complements the frontend navigation cleanup checks documented above.
 
 ## Notes
 
@@ -392,3 +392,26 @@ generates creation timestamps for pipelines and notes because the supplied
 file omits them.
 
 Requires no additional npm packages or locally installed PostgreSQL tools.
+
+## Design decisions and trade-offs
+
+- Controllers handle HTTP requests, services coordinate application behavior,
+  and repositories contain SQL. React API access, state hooks, and presentation
+  components are separated.
+- PostgreSQL constraints protect relationships and valid values. Flyway
+  migrations keep schema changes versioned.
+- Run pagination uses the start timestamp and ID rather than offsets,
+  providing deterministic ordering when timestamps match.
+- Pipeline idempotency stores the original response separately so retries
+  remain consistent after updates or deletion. Records currently have no expiry.
+- SSE subscribers are held in memory for one API instance. Multiple instances
+  would require shared event delivery.
+- Live updates synchronize run status and timing. Notes changed in another
+  tab require a page refresh.
+
+## With more time
+
+- Add automated HTTP contract tests and broader browser workflow coverage.
+- Define an idempotency retention policy and cleanup process.
+- Add shared event delivery before running multiple API instances.
+- Improve mobile table presentation and perform a fuller accessibility review.
