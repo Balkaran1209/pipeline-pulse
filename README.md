@@ -71,6 +71,9 @@ Run details are implemented and include associated notes.
 Run status updates and completion timing are implemented.
 Live run-status streaming through Server-Sent Events is implemented.
 Note creation and deletion are implemented.
+Seed-data import is implemented and verified, including repeat execution
+and persistence across an API restart.
+
 Frontend views are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
@@ -248,5 +251,27 @@ already-applied migration.
 
 ## Seeding
 
-The seed import command is not implemented yet.
-It will load the supplied seed/seed.json without modifying it.
+Prerequisites: Docker Compose and Node.js 24, as specified in .nvmrc.
+
+From the repository root:
+
+    nvm use
+    docker compose up -d --wait api
+    node backend/scripts/seed.mjs
+
+Starting the API ensures database migrations have been applied.
+
+The command reads the supplied seed/seed.json without modifying it and
+imports 3 pipelines, 7 runs, and 3 notes.
+
+Records are inserted in dependency order within one transaction.
+If an insertion fails, the transaction is rolled back.
+
+Existing IDs are skipped. Re-running the command creates no duplicates
+and preserves edits to existing records.
+
+Supplied IDs, statuses, and run timestamps are preserved. PostgreSQL
+generates creation timestamps for pipelines and notes because the supplied
+file omits them.
+
+Requires no additional npm packages or locally installed PostgreSQL tools.

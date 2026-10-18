@@ -38,6 +38,7 @@ row locking, completion timing, and automated database tests.
   missing-resource handling, and database workflow tests.
 - Implementing SSE run-status streaming, heartbeat scheduling,
   disconnect cleanup, and an automated cleanup test.
+- AI implementation of backend/scripts/seed.mjs.
 
 
 
@@ -150,6 +151,11 @@ This is running change, might add more occurances.
 - Passed 50 sequential SSE connect/disconnect cycles, confirming the
   subscriber count returned to zero after each disconnection.
 - Passed all 17 backend tests with ./mvnw clean verify.
+- Imported the supplied 3 pipelines, 7 runs, and 3 notes.
+- Repeated the import and confirmed no duplicate records were inserted.
+- Compared SHA-256 hashes before and after import; seed.json was unchanged.
+- Restarted the API and verified every supplied record through its endpoints,
+  including run timing, nullable fields, and note-to-run relationships.
 
 Application verification will be recorded as features are implemented.
 
@@ -159,4 +165,4 @@ Application verification will be recorded as features are implemented.
 - Date: 2026-10-17.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
-  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java.
+  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs.
