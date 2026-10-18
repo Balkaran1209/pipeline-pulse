@@ -44,6 +44,8 @@ row locking, completion timing, and automated database tests.
 - Shared frontend types, HTTP client, and pipeline API functions.
 - Pipeline-list fetching, request cancellation, page rendering,
   loading/empty/error states, retry behavior, and table styles.
+- Pipeline creation form and request hook, including validation,
+  submission guarding, cancellation, and idempotency-key reuse.
 
 
 
@@ -167,6 +169,11 @@ This is running change, might add more occurances.
 - Verified pipeline links and navigation back to the list.
 - Stopped the API and confirmed the error state appeared.
 - Restarted the API and confirmed Try again restored the table.
+- Frontend build and lint passed.
+- Verified successful creation and automatic list refresh.
+- Verified failed creation retains the submitted details.
+- Compared failed and retried POST headers in Chrome DevTools and
+  confirmed the same Idempotency-Key was reused.
 
 
 Application verification will be recorded as features are implemented.
@@ -177,4 +184,4 @@ Application verification will be recorded as features are implemented.
 - Date: 2026-10-17.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
-  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs, frontend/vite.config.ts, frontend/src/main.tsx, frontend/src/App.tsx, frontend/src/index.css, frontend/src/App.css, frontend/src/api/types.ts, frontend/src/api/client.ts, frontend/src/api/pipelines.ts, frontend/src/features/pipelines/usePipelines.ts, frontend/src/features/pipelines/PipelinesPage.tsx.
+  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs, frontend/vite.config.ts, frontend/src/main.tsx, frontend/src/App.tsx, frontend/src/index.css, frontend/src/App.css, frontend/src/api/types.ts, frontend/src/api/client.ts, frontend/src/api/pipelines.ts, frontend/src/features/pipelines/usePipelines.ts, frontend/src/features/pipelines/PipelinesPage.tsx,frontend/src/features/pipelines/useCreatePipeline.ts, frontend/src/features/pipelines/CreatePipelineForm.tsx.

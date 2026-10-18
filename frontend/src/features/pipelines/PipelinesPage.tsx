@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { usePipelines } from './usePipelines'
+import CreatePipelineForm from './CreatePipelineForm'
 
 const productLabels = {
   flasharray: 'FlashArray',
@@ -16,6 +17,7 @@ export default function PipelinesPage() {
         <h1 id="pipelines-title">Pipelines</h1>
         <p>View your CI pipelines and explore their runs.</p>
       </div>
+      <CreatePipelineForm onCreated={reload} />
 
       {state.status === 'loading' && (
         <p className="notice" role="status">

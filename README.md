@@ -81,8 +81,14 @@ The pipelines page loads records from the API and includes loading,
 empty, and error states, plus retry support. Pipeline names link to
 their runs pages. List requests are cancelled when the page unmounts.
 
-Pipeline creation, renaming, and deletion controls are pending.
-The runs and run-details pages currently show page shells.
+Pipeline creation is implemented with validation and submitting, success,
+and error states. Successful creation refreshes the list.
+
+Retries with unchanged details reuse the same idempotency key while the
+form remains mounted. Controls are disabled during submission, and pending
+creation requests are cancelled when the form unmounts.
+
+Pipeline renaming and deletion controls are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string

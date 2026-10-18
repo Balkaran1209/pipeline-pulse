@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
 import { ApiError } from '../../api/client'
 import { pipelineApi } from '../../api/pipelines'
 import type { Pipeline } from '../../api/types'
+import { useEffect, useRef, useState } from 'react'
 
 type PipelinesState =
   | { status: 'loading' }
@@ -13,9 +13,11 @@ export function usePipelines() {
     status: 'loading',
   })
   const [reloadKey, setReloadKey] = useState(0)
+  const activeRequest = useRef<AbortController | null>(null)
 
   useEffect(() => {
     const controller = new AbortController()
+    activeRequest.current = controller
 
     pipelineApi
       .list(controller.signal)
@@ -41,6 +43,7 @@ export function usePipelines() {
   }, [reloadKey])
 
   function reload() {
+    activeRequest.current?.abort()
     setState({ status: 'loading' })
     setReloadKey(current => current + 1)
   }
