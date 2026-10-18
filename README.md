@@ -64,7 +64,8 @@ Pipeline creation, listing, individual retrieval, partial updates, and
 deletion are implemented, with validation and structured JSON errors.
 
 Pipeline creation supports an optional Idempotency-Key header.
-Run creation, listing, status filtering, and cursor pagination are implemented.
+Backend run creation, listing, status filtering, and cursor pagination
+are implemented.
 New runs start as queued, with a generated ID and start timestamp.
 
 Run details are implemented and include associated notes.
@@ -101,6 +102,16 @@ retrying. A NOT_FOUND response also removes the stale row because the
 pipeline is already absent.
 
 The pipelines screen supports listing, creation, renaming, and deletion.
+
+The pipeline runs screen loads pipeline information and the first page
+of up to 10 runs, ordered newest first. Rows show status badges, start
+times, trigger authors, and shortened commit SHAs, and link to run details.
+
+Loading, empty, and error states and retry support are implemented.
+Requests are cancelled when leaving the page or starting a replacement load.
+
+Frontend status filtering, Load more pagination, and run creation are pending.
+The run-details screen currently shows a page shell.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string

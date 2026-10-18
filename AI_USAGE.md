@@ -50,6 +50,8 @@ row locking, completion timing, and automated database tests.
   list-state updates, and editor styles.
 - Pipeline deletion hook, inline confirmation, list-state updates,
   error recovery, and handling of already-deleted records.
+- Runs API access, pipeline-runs fetching and presentation,
+  reusable status badges, and route integration.
 
 
 
@@ -187,6 +189,9 @@ This is running change, might add more occurances.
 - Deleted the same pipeline from two tabs and confirmed the second tab
   removed its stale row without showing an error.
 - Confirmed renaming still works.
+- Verified seeded runs appear newest first with the expected status badges.
+- Verified run links, empty pipelines, and missing-pipeline errors.
+- Verified the API failure state and recovery through Try again.
 
 
 Application verification will be recorded as features are implemented.
@@ -197,4 +202,4 @@ Application verification will be recorded as features are implemented.
 - Date: 2026-10-17.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
-  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs, frontend/vite.config.ts, frontend/src/main.tsx, frontend/src/App.tsx, frontend/src/index.css, frontend/src/App.css, frontend/src/api/types.ts, frontend/src/api/client.ts, frontend/src/api/pipelines.ts, frontend/src/features/pipelines/usePipelines.ts, frontend/src/features/pipelines/PipelinesPage.tsx,frontend/src/features/pipelines/useCreatePipeline.ts, frontend/src/features/pipelines/CreatePipelineForm.tsx, frontend/src/features/pipelines/useRenamePipeline.ts, frontend/src/features/pipelines/PipelineRow.tsx, frontend/src/features/pipelines/useDeletePipeline.ts, frontend/src/features/pipelines/DeletePipelineAction.tsx.
+  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs, frontend/vite.config.ts, frontend/src/main.tsx, frontend/src/App.tsx, frontend/src/index.css, frontend/src/App.css, frontend/src/api/types.ts, frontend/src/api/client.ts, frontend/src/api/pipelines.ts, frontend/src/features/pipelines/usePipelines.ts, frontend/src/features/pipelines/PipelinesPage.tsx,frontend/src/features/pipelines/useCreatePipeline.ts, frontend/src/features/pipelines/CreatePipelineForm.tsx, frontend/src/features/pipelines/useRenamePipeline.ts, frontend/src/features/pipelines/PipelineRow.tsx, frontend/src/features/pipelines/useDeletePipeline.ts, frontend/src/features/pipelines/DeletePipelineAction.tsxfrontend/src/api/runs.ts, frontend/src/features/runs/usePipelineRuns.ts, frontend/src/features/runs/PipelineRunsPage.tsx, frontend/src/components/RunStatusBadge.tsx.

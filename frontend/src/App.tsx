@@ -1,17 +1,17 @@
 import { Link, Route, Routes, useParams } from 'react-router'
 import PipelinesPage from './features/pipelines/PipelinesPage'
 import './App.css'
+import PipelineRunsPage from './features/runs/PipelineRunsPage'
 
 
-function PipelineRunsPage() {
+function PipelineRunsRoute() {
   const { id } = useParams()
 
-  return (
-    <section>
-      <h1>Pipeline runs</h1>
-      <p>Pipeline: {id}</p>
-    </section>
-  )
+  if (!id) {
+    return <NotFoundPage />
+  }
+
+  return <PipelineRunsPage key={id} pipelineId={id} />
 }
 
 function RunDetailsPage() {
@@ -55,7 +55,7 @@ export default function App() {
           <Route path="/" element={<PipelinesPage />} />
           <Route
             path="/pipelines/:id"
-            element={<PipelineRunsPage />}
+            element={<PipelineRunsRoute />}
           />
           <Route path="/runs/:id" element={<RunDetailsPage />} />
           <Route path="*" element={<NotFoundPage />} />
