@@ -247,3 +247,15 @@
   background: #fef3c7;
   color: #92400e;
 }
+.run-controls {
+  max-width: 16rem;
+  margin-bottom: 1.5rem;
+}
+
+.pagination-controls {
+  margin-top: 1rem;
+}
+
+.pagination-controls p {
+  margin: 0 0 0.75rem;
+}

@@ -1,5 +1,5 @@
-import { Link } from 'react-router'
-import RunStatusBadge from '../../components/RunStatusBadge'
+import type { RunStatus } from '../../api/types'
+import RunsTable from './RunsTable'
 import { usePipelineRuns } from './usePipelineRuns'
 
 interface PipelineRunsPageProps {
@@ -9,7 +9,13 @@ interface PipelineRunsPageProps {
 export default function PipelineRunsPage({
   pipelineId,
 }: PipelineRunsPageProps) {
-  const { state, reload } = usePipelineRuns(pipelineId)
+  const {
+    state,
+    statusFilter,
+    changeStatus,
+    reload,
+    loadMore,
+  } = usePipelineRuns(pipelineId)
 
   return (
     <section aria-labelledby="pipeline-runs-title">
@@ -20,6 +26,26 @@ export default function PipelineRunsPage({
             : 'Pipeline runs'}
         </h1>
         <p>Recent pipeline runs, newest first.</p>
+      </div>
+
+      <div className="run-controls">
+        <div className="form-field">
+          <label htmlFor="run-status-filter">Status</label>
+          <select
+            id="run-status-filter"
+            value={statusFilter}
+            onChange={event =>
+              changeStatus(event.target.value as RunStatus | '')
+            }
+          >
+            <option value="">All statuses</option>
+            <option value="queued">Queued</option>
+            <option value="running">Running</option>
+            <option value="passed">Passed</option>
+            <option value="failed">Failed</option>
+            <option value="flaky">Flaky</option>
+          </select>
+        </div>
       </div>
 
       {state.status === 'loading' && (
@@ -38,54 +64,52 @@ export default function PipelineRunsPage({
       )}
 
       {state.status === 'success' && state.page.items.length === 0 && (
-        <p className="notice">No runs yet.</p>
+        <p className="notice" role="status">
+          {statusFilter
+            ? 'No runs match this status.'
+            : 'No runs yet.'}
+        </p>
       )}
 
       {state.status === 'success' && state.page.items.length > 0 && (
-        <div
-          className="table-scroll"
-          role="region"
-          aria-label="Pipeline runs table"
-          tabIndex={0}
-        >
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th scope="col">Run</th>
-                <th scope="col">Status</th>
-                <th scope="col">Started</th>
-                <th scope="col">Triggered by</th>
-                <th scope="col">Commit</th>
-              </tr>
-            </thead>
+        <>
+          <RunsTable runs={state.page.items} />
 
-            <tbody>
-              {state.page.items.map(run => (
-                <tr key={run.id} data-testid="run-row">
-                  <td>
-                    <Link to={`/runs/${encodeURIComponent(run.id)}`}>
-                      {run.id}
-                    </Link>
-                  </td>
-                  <td>
-                    <RunStatusBadge status={run.status} />
-                  </td>
-                  <td>
-                    <time dateTime={run.startedAt}>
-                      {new Date(run.startedAt).toLocaleString()}
-                    </time>
-                  </td>
-                  <td>{run.triggeredBy}</td>
-                  <td>
-                    <code title={run.commitSha}>
-                      {run.commitSha.slice(0, 7)}
-                    </code>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+          <div
+            className="pagination-controls"
+            aria-busy={state.more.status === 'loading'}
+          >
+            <p role="status">
+              {state.page.items.length}{' '}
+              {state.page.items.length === 1 ? 'run' : 'runs'} loaded.
+              {state.page.nextCursor === null
+                ? ' All runs loaded.'
+                : ''}
+            </p>
+
+            {state.more.status === 'error' && (
+              <p className="form-error" role="alert">
+                {state.more.message}
+              </p>
+            )}
+
+            {state.page.nextCursor !== null && (
+              <button
+                className="button"
+                type="button"
+                data-testid="run-load-more"
+                onClick={loadMore}
+                disabled={state.more.status === 'loading'}
+              >
+                {state.more.status === 'loading'
+                  ? 'Loading...'
+                  : state.more.status === 'error'
+                    ? 'Retry loading more'
+                    : 'Load more'}
+              </button>
+            )}
+          </div>
+        </>
       )}
     </section>
   )

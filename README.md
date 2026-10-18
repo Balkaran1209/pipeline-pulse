@@ -103,14 +103,18 @@ pipeline is already absent.
 
 The pipelines screen supports listing, creation, renaming, and deletion.
 
-The pipeline runs screen loads pipeline information and the first page
-of up to 10 runs, ordered newest first. Rows show status badges, start
-times, trigger authors, and shortened commit SHAs, and link to run details.
+The pipeline runs screen displays newest-first runs with status badges,
+start times, trigger authors, commit SHAs, and links to run details.
 
-Loading, empty, and error states and retry support are implemented.
-Requests are cancelled when leaving the page or starting a replacement load.
+Status filtering and cursor-based Load more pagination are implemented,
+with 10 runs requested per page. Changing the filter resets the results
+and cursor and cancels the previous request.
 
-Frontend status filtering, Load more pagination, and run creation are pending.
+Loading another page preserves existing rows. Failures show an error
+with retry support, and the Load more button disappears when no further
+pages remain. Pending requests are cancelled when leaving the page.
+
+Frontend run creation is pending.
 The run-details screen currently shows a page shell.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
