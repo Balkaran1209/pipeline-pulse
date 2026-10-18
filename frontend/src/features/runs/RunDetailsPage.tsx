@@ -4,6 +4,7 @@ import { useRunDetails } from './useRunDetails'
 import UpdateRunStatusForm from './UpdateRunStatusForm'
 import CreateNoteForm from '../notes/CreateNoteForm'
 import DeleteNoteAction from '../notes/DeleteNoteAction'
+import RunLiveUpdates from './RunLiveUpdates'
 
 interface RunDetailsPageProps {
   runId: string
@@ -20,7 +21,7 @@ function Timestamp({ value }: { value: string }) {
 export default function RunDetailsPage({
   runId,
 }: RunDetailsPageProps) {
-  const { state, reload, replaceRun, addNote, removeNote } = useRunDetails(runId)
+  const { state, reload, replaceRun, addNote, removeNote, liveError, refreshStatus } = useRunDetails(runId)
 
   return (
     <section>
@@ -56,6 +57,16 @@ export default function RunDetailsPage({
 
       {state.status === 'success' && (
         <>
+          <RunLiveUpdates
+            runId={state.run.id}
+            onRefresh={refreshStatus}
+          />
+
+          {liveError !== null && (
+            <p className="form-error" role="alert">
+              {liveError}
+            </p>
+          )}
           <section
             className="panel"
             aria-labelledby="run-summary-title"

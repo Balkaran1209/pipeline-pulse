@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ApiError } from '../../api/client'
 import { runApi } from '../../api/runs'
 import type { Note, Run, RunDetails } from '../../api/types'
@@ -13,6 +13,7 @@ export function useRunDetails(runId: string) {
     status: 'loading',
   })
   const [reloadKey, setReloadKey] = useState(0)
+  const [liveError, setLiveError] = useState<string | null>(null)
   const activeRequest = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -43,15 +44,75 @@ export function useRunDetails(runId: string) {
         }
       })
 
-    return () => controller.abort()
+    return () => {
+      controller.abort()
+      activeRequest.current?.abort()
+    }
   }, [runId, reloadKey])
+
+  const refreshStatus = useCallback(() => {
+    activeRequest.current?.abort()
+
+    const controller = new AbortController()
+    activeRequest.current = controller
+
+    runApi.get(runId, controller.signal)
+      .then(run => {
+        if (controller.signal.aborted) {
+          return
+        }
+
+        setLiveError(null)
+
+        setState(current => {
+          if (
+            current.status !== 'success'
+            || current.run.id !== run.id
+          ) {
+            return current
+          }
+
+          return {
+            status: 'success',
+            run: {
+              ...run,
+              notes: current.run.notes,
+            },
+          }
+        })
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) {
+          return
+        }
+
+        if (error instanceof ApiError && error.status === 404) {
+          setState({
+            status: 'error',
+            message: error.message,
+          })
+          return
+        }
+
+        setLiveError(
+          'Could not refresh the run status. Use Reconnect to try again.',
+        )
+      })
+      .finally(() => {
+        if (activeRequest.current === controller) {
+          activeRequest.current = null
+        }
+      })
+  }, [runId])
 
   function reload() {
     activeRequest.current?.abort()
+    setLiveError(null)
     setState({ status: 'loading' })
     setReloadKey(value => value + 1)
   }
   function replaceRun(updated: Run) {
+    activeRequest.current?.abort()
     setState(current => {
       if (
         current.status !== 'success'
@@ -103,5 +164,13 @@ export function useRunDetails(runId: string) {
       }
     })
   }
-  return { state, reload, replaceRun, addNote, removeNote }
+  return {
+    state,
+    reload,
+    replaceRun,
+    addNote,
+    removeNote,
+    liveError,
+    refreshStatus,
+  }
 }

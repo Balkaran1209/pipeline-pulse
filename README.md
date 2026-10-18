@@ -140,7 +140,12 @@ Frontend note deletion is implemented with confirmation, cancellation,
 and retry after failure. Notes already deleted in another tab are removed
 from the current view without an error.
 
-Frontend live events are pending.
+The run-details screen receives live status events through SSE and
+refreshes status and completion timing without replacing note drafts.
+It displays connection state, reconnects automatically after failures,
+and closes the stream and retry timer when leaving the page.
+Live events currently synchronize run status and timing, not notes
+created or deleted in other tabs.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string

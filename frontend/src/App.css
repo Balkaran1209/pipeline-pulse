@@ -348,3 +348,15 @@
 .note-delete-action {
   margin-top: 1rem;
 }
+.run-live-updates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.run-live-updates p {
+  margin: 0;
+}
