@@ -2,6 +2,7 @@ import { Link, Route, Routes, useParams } from 'react-router'
 import PipelinesPage from './features/pipelines/PipelinesPage'
 import './App.css'
 import PipelineRunsPage from './features/runs/PipelineRunsPage'
+import RunDetailsPage from './features/runs/RunDetailsPage'
 
 
 function PipelineRunsRoute() {
@@ -14,15 +15,14 @@ function PipelineRunsRoute() {
   return <PipelineRunsPage key={id} pipelineId={id} />
 }
 
-function RunDetailsPage() {
+function RunDetailsRoute() {
   const { id } = useParams()
 
-  return (
-    <section>
-      <h1>Run details</h1>
-      <p>Run: {id}</p>
-    </section>
-  )
+  if (!id) {
+    return <NotFoundPage />
+  }
+
+  return <RunDetailsPage key={id} runId={id} />
 }
 
 function NotFoundPage() {
@@ -57,7 +57,7 @@ export default function App() {
             path="/pipelines/:id"
             element={<PipelineRunsRoute />}
           />
-          <Route path="/runs/:id" element={<RunDetailsPage />} />
+          <Route path="/runs/:id" element={<RunDetailsRoute />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

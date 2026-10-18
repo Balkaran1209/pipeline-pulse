@@ -2,6 +2,7 @@ import { requestJson } from './client'
 import type {
   CreateRunInput,
   Run,
+  RunDetails,
   RunPage,
   RunStatus,
 } from './types'
@@ -36,6 +37,12 @@ export const runApi = {
     )
   },
 
+  get(id: string, signal?: AbortSignal): Promise<RunDetails> {
+    return requestJson<RunDetails>(
+      `/runs/${encodeURIComponent(id)}`,
+      { signal },
+    )
+  },
   create(
     pipelineId: string,
     input: CreateRunInput,

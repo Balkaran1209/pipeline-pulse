@@ -122,7 +122,12 @@ The form preserves entered values after a failure. When creation cannot
 be confirmed, users can refresh the run list before submitting again.
 Run creation requests are not automatically retried.
 
-The run-details screen currently shows a page shell.
+The run-details screen displays status, trigger author, start and finish
+times, duration, full commit SHA, and existing triage notes.
+It supports loading, empty notes, missing-run errors, and retry after
+API failures. Pending requests are cancelled when leaving the page.
+
+Frontend status updates, note creation/deletion, and live events are pending.
 
 Pipeline updates accept name, product, or both. Omitted fields remain
 unchanged. Blank names, unsupported products, explicit nulls, non-string
