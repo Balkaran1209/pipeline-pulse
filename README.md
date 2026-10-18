@@ -337,6 +337,14 @@ RunEventsCleanupTests verifies 50 sequential connections and disconnections,
 checking that no subscribers remain registered after each disconnection.
 This backend test complements the frontend navigation cleanup checks documented above.
 
+Each status-change event carries the committed status rather than
+rereading it later. This preserves intermediate changes when delivery
+is delayed. Heartbeats send keep-alive comments and check whether
+the run still exists.
+
+RunEventsDeliveryTests pauses delivery, commits running and passed
+updates, then verifies that both events arrive in order.
+
 ## Notes
 
 POST /api/v1/runs/{runId}/notes accepts author and body and returns

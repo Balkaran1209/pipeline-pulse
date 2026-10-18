@@ -114,13 +114,23 @@ public class RunEventService {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onStatusChanged(RunStatusChanged event) {
-        if (stopping || !subscribers.containsKey(event.runId())) {
+        if (stopping) {
             return;
         }
 
+        var group = subscribers.get(event.runId());
+
+        if (group == null) {
+            return;
+        }
+
+        var recipients = List.copyOf(group);
+
         try {
             scheduler.schedule(
-                    () -> refreshRun(event.runId(), false),
+                    () -> recipients.forEach(subscription ->
+                            deliverStatus(subscription, event.status())
+                    ),
                     Instant.now()
             );
         } catch (TaskRejectedException exception) {
@@ -128,6 +138,23 @@ public class RunEventService {
                     "Run event delivery stopped during shutdown",
                     exception
             );
+        }
+    }
+    private void deliverStatus(
+            Subscription subscription,
+            String status
+    ) {
+        synchronized (subscription) {
+            if (subscription.closed
+                    || status.equals(subscription.lastStatus)) {
+                return;
+            }
+
+            try {
+                sendStatus(subscription, status);
+            } catch (IOException | IllegalStateException exception) {
+                remove(subscription);
+            }
         }
     }
 
@@ -157,15 +184,11 @@ public class RunEventService {
                     return;
                 }
 
-                String status = found.get().status();
-
-                if (!status.equals(subscription.lastStatus)) {
-                    sendStatus(subscription, status);
-                } else if (heartbeat) {
-                    subscription.emitter.send(
-                            SseEmitter.event().comment("keep-alive")
-                    );
-                }
+            if (heartbeat) {
+                subscription.emitter.send(
+                        SseEmitter.event().comment("keep-alive")
+                );
+            }
             } catch (IOException | IllegalStateException exception) {
                 remove(subscription);
             } catch (DataAccessException exception) {

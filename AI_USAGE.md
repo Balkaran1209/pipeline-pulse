@@ -62,6 +62,7 @@ row locking, completion timing, and automated database tests.
 - Frontend SSE integration, reconnection, and development proxy cleanup.
 - Playwright navigation cleanup tests, browser resource instrumentation,
   and interpretation of resource measurements.
+- AI-guided SSE delivery correction and regression test for delayed events.
 
 
 
@@ -106,7 +107,8 @@ Implementation prompts will be recorded as development proceeds.
 - Reworked the initial Vite proxy configuration after testing showed that stopping the API left the browser's SSE connection appearing open. Added stream error and closure forwarding, then verified automatic disconnection detection and reconnection.
 
 - Revised the initial browser test because it sampled immediately after navigation and caught temporary DOM retention. Added two animation frames before garbage collection and measurement, kept the limits unchanged, and verified stable counts in subsequent 50- and 200-cycle runs.
-    
+
+- Reworked SSE delivery after a regression test demonstrated that rereading the latest database status skipped an intermediate running event. Events now carry their committed status, and heartbeats no longer replace queued status events with the latest database value.
 
 
 This is running change, might add more occurances.
@@ -238,6 +240,11 @@ This is running change, might add more occurances.
   after navigation, and heap growth within the configured allowance.
 - Verified cancellation of a pending reconnect timer and abortion of an
   in-flight run-details request.
+  - Confirmed the delayed-delivery test failed before the fix and passed afterward.
+- Passed all 18 backend tests with ./mvnw clean verify.
+- Rebuilt the Docker stack and verified healthy services and HTTP 200
+  through the Nginx API proxy.
+- Reran the 50-cycle browser cleanup test successfully after the SSE fix.
 
 Application verification will be recorded as features are implemented.
 
@@ -247,4 +254,4 @@ Application verification will be recorded as features are implemented.
 - Date: 2026-10-18.
 - Files generated or substantially edited through guided instructions:
   README.md, AI_USAGE.md, .gitignore, .nvmrc, docker-compose.yml, backend/pom.xml, backend/migrations/V1__create_core_tables.sql, backend/src/main/resources/application.properties
-  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs, frontend/vite.config.ts, frontend/src/main.tsx, frontend/src/App.tsx, frontend/src/index.css, frontend/src/App.css, frontend/src/api/types.ts, frontend/src/api/client.ts, frontend/src/api/pipelines.ts, frontend/src/features/pipelines/usePipelines.ts, frontend/src/features/pipelines/PipelinesPage.tsx,frontend/src/features/pipelines/useCreatePipeline.ts, frontend/src/features/pipelines/CreatePipelineForm.tsx, frontend/src/features/pipelines/useRenamePipeline.ts, frontend/src/features/pipelines/PipelineRow.tsx, frontend/src/features/pipelines/useDeletePipeline.ts, frontend/src/features/pipelines/DeletePipelineAction.tsxfrontend/src/api/runs.ts, frontend/src/features/runs/usePipelineRuns.ts, frontend/src/features/runs/PipelineRunsPage.tsx, frontend/src/components/RunStatusBadge.tsx, frontend/src/features/runs/RunsTable.tsx, frontend/src/features/runs/CreateRunForm.tsx, frontend/src/features/runs/useCreateRun.ts, frontend/src/features/runs/RunDetailsPage.tsx, frontend/src/features/runs/useRunDetails.ts, frontend/src/features/runs/UpdateRunStatusForm.tsx, frontend/src/features/runs/useUpdateRunStatus.ts, frontend/src/api/notes.ts, frontend/src/features/notes/CreateNoteForm.tsx, frontend/src/features/notes/useCreateNote.ts frontend/src/features/notes/DeleteNoteAction.tsx, frontend/src/features/notes/useDeleteNote.ts, frontend/src/features/runs/RunLiveUpdates.tsx, frontend/playwright.config.ts , frontend/tsconfig.e2e.json, frontend/e2e/resource-probe.js, frontend/e2e/navigation-cleanup.spec.ts.
+  backend/Dockerfile, backend/.dockerignore, frontend/Dockerfile, frontend/.dockerignore, frontend/nginx.conf, backend/src/main/java/com/balkaran/pipelinepulse/pipeline/UpdatePipelineRequest.java, backend/scripts/check-idempotency.mjs, backend/migrations/V2__create_pipeline_idempotency.sql, backend/src/test/java/com/balkaran/pipelinepulse/run/RunLisitngTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/RunStatusTests.java, backend/src/test/java/com/balkaran/pipelinepulse/note/NoteWorkflowTests.java, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsCleanupTests.java, backend/scripts/seed.mjs, frontend/vite.config.ts, frontend/src/main.tsx, frontend/src/App.tsx, frontend/src/index.css, frontend/src/App.css, frontend/src/api/types.ts, frontend/src/api/client.ts, frontend/src/api/pipelines.ts, frontend/src/features/pipelines/usePipelines.ts, frontend/src/features/pipelines/PipelinesPage.tsx,frontend/src/features/pipelines/useCreatePipeline.ts, frontend/src/features/pipelines/CreatePipelineForm.tsx, frontend/src/features/pipelines/useRenamePipeline.ts, frontend/src/features/pipelines/PipelineRow.tsx, frontend/src/features/pipelines/useDeletePipeline.ts, frontend/src/features/pipelines/DeletePipelineAction.tsxfrontend/src/api/runs.ts, frontend/src/features/runs/usePipelineRuns.ts, frontend/src/features/runs/PipelineRunsPage.tsx, frontend/src/components/RunStatusBadge.tsx, frontend/src/features/runs/RunsTable.tsx, frontend/src/features/runs/CreateRunForm.tsx, frontend/src/features/runs/useCreateRun.ts, frontend/src/features/runs/RunDetailsPage.tsx, frontend/src/features/runs/useRunDetails.ts, frontend/src/features/runs/UpdateRunStatusForm.tsx, frontend/src/features/runs/useUpdateRunStatus.ts, frontend/src/api/notes.ts, frontend/src/features/notes/CreateNoteForm.tsx, frontend/src/features/notes/useCreateNote.ts frontend/src/features/notes/DeleteNoteAction.tsx, frontend/src/features/notes/useDeleteNote.ts, frontend/src/features/runs/RunLiveUpdates.tsx, frontend/playwright.config.ts , frontend/tsconfig.e2e.json, frontend/e2e/resource-probe.js, frontend/e2e/navigation-cleanup.spec.ts, backend/src/test/java/com/balkaran/pipelinepulse/run/events/RunEventsDeliveryTests.java.

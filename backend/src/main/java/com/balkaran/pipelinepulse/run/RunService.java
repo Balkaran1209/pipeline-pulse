@@ -165,7 +165,7 @@ public class RunService {
         );
 
         eventPublisher.publishEvent(
-                new RunStatusChanged(updated.id())
+            new RunStatusChanged(updated.id(), updated.status())
         );
 
         return updated;
