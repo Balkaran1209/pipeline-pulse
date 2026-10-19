@@ -67,10 +67,6 @@ row locking, completion timing, and automated database tests.
 
 
 
-
-
-This record will be updated during implementation.
-
 ## Representative prompts
 
 - "Help me build a schema(we will use this to generate migration file), i have shared the entities, below is the relation between them
@@ -91,7 +87,6 @@ This record will be updated during implementation.
 - "We need to implemetn idempotency in creation. Our frontend will generate an Idempotency-Key for each pipeline creation attempt and reuse it for retries. Controller should pass the key and request body to Service. Without a key, creation should work normally a blank key returns error. With a key, the service should acquire a database lock and then check pipeline_creation_requests: matching the name and the product return the saved original response; different input should throw an conflict. For a new key, it should create the pipeline and save the original input and response—including ID, name, product, and timestamp—in one transaction, so both inserts succeed or both roll back."
 - "We need to implement GET runs to list a pipeline’s runs (newest first), using ID to break timestamp ties. It should support optional status filtering, a page limit of 1–100 (we can default maybe 20), and cursor pagination. Response shall contain items and nextCursor; a null cursor if no more results. Cursor should remember the last run’s timestamp and ID and sdhould be tied to the pipeline and filter. Error raising should be there as we have done so far. Also create in test file to test everything."
 
-Implementation prompts will be recorded as development proceeds.
 
 ## Output rejected or rewritten
 - In docker-compose.yml 
@@ -111,7 +106,6 @@ Implementation prompts will be recorded as development proceeds.
 - Reworked SSE delivery after a regression test demonstrated that rereading the latest database status skipped an intermediate running event. Events now carry their committed status, and heartbeats no longer replace queued status events with the latest database value.
 
 
-This is running change, might add more occurances.
 
 ## Verification
 

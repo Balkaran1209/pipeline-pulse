@@ -41,6 +41,12 @@ The frontend serves compiled React assets through Nginx.
 Requests to /api/ are forwarded to the API container.
 Flyway applies database migrations when the API starts.
 
+To optionally load the supplied sample data, run in another terminal:
+
+```bash
+docker compose run --rm seed
+```
+
 ## Local development alongside Docker
 
 Before starting a frontend or backend development server locally, stop its
@@ -50,6 +56,11 @@ corresponding container to free port 3000 or 8080:
     docker compose stop api
 
 Keep the database running for backend development and the current backend tests.
+
+Local development and testing require additional tools: Node.js 24
+for frontend development and Java 21 for backend development.
+The JAVA_HOME commands below are specific to macOS.
+Running and seeding the Docker application require only Docker.
 
 ## Application ports
 
