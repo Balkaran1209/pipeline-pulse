@@ -240,7 +240,6 @@ row locking, completion timing, and automated database tests.
   through the Nginx API proxy.
 - Reran the 50-cycle browser cleanup test successfully after the SSE fix.
 
-Application verification will be recorded as features are implemented.
 
 ## Assistant Attestation
 
