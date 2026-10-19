@@ -376,30 +376,35 @@ already-applied migration.
 
 ## Seeding
 
-Prerequisites: Docker Compose and Node.js 24, as specified in .nvmrc.
+Seeding is optional. The application can also be used with an empty database.
+
+Prerequisite: Docker Desktop or Docker Engine with Docker Compose.
+No local Node.js, Java, or PostgreSQL installation is required.
 
 From the repository root:
 
-    nvm use
-    docker compose up -d --wait api
-    node backend/scripts/seed.mjs
+```bash
+docker compose up --build -d --wait
+docker compose run --rm seed
+```
 
-Starting the API ensures database migrations have been applied.
+The seed command imports the supplied 3 pipelines, 7 runs, and 3 notes.
+It runs inside a temporary container and waits for the API to be healthy,
+ensuring database migrations have been applied.
 
-The command reads the supplied seed/seed.json without modifying it and
-imports 3 pipelines, 7 runs, and 3 notes.
-
+The supplied seed/seed.json is mounted read-only and is not modified.
 Records are inserted in dependency order within one transaction.
-If an insertion fails, the transaction is rolled back.
+An insertion failure rolls back the transaction.
 
-Existing IDs are skipped. Re-running the command creates no duplicates
+Existing IDs are skipped. Repeating the command creates no duplicates
 and preserves edits to existing records.
 
 Supplied IDs, statuses, and run timestamps are preserved. PostgreSQL
 generates creation timestamps for pipelines and notes because the supplied
 file omits them.
 
-Requires no additional npm packages or locally installed PostgreSQL tools.
+The --rm option removes the temporary seed container after execution.
+Imported data remains in PostgreSQL's persistent volume.
 
 ## Design decisions and trade-offs
 

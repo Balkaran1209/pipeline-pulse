@@ -73,5 +73,27 @@ services:
       retries: 10
       start_period: 5s
 
+  seed:
+    image: postgres:17
+    profiles: ["tools"]
+    environment:
+      PGHOST: db
+      PGDATABASE: pipeline_pulse
+      PGUSER: pipeline_pulse
+      PGPASSWORD: pipeline_pulse
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - ./seed:/seed:ro
+      - ./backend/scripts/seed.sql:/scripts/seed.sql:ro
+    command:
+      - psql
+      - -X
+      - -v
+      - ON_ERROR_STOP=1
+      - -f
+      - /scripts/seed.sql
+
 volumes:
   postgres_data:
